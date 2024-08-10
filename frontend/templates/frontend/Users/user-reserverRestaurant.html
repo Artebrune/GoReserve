@@ -1,0 +1,147 @@
+{% extends 'frontend/Users/user-base.html' %}
+
+{% block title %}GoReserve - reserver Restaurant{% endblock %}
+
+{% block head %}
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+{% endblock %}
+
+{% block content %}
+{% load static %}
+<style>
+    .alert{
+        text-align: center;
+		width : 75%; 
+		margin-left: 145px;
+		font-size: 18px;
+    }
+</style>
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% endif %}" role="alert">
+        {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+<!-- =======================
+Main Banner START -->
+<section class="position-relative">
+
+	<!-- Svg decoration -->
+	<!--<div class="position-absolute top-50 start-0 translate-middle-y d-none d-md-block">
+		<img src="{% static 'assets/images/element/decoration.svg' %}" alt="">
+	</div> -->
+
+	<div class="container">
+		<!-- Content and Image START -->
+		<div class="row g-4 g-lg-5 align-items-center">
+			<!-- Content -->
+			<div class="col-lg-6 position-relative">
+				<h6 class="text-uppercase">🤩 UN MOYEN FACILE DE FAIRE VOTRE RESERVATION</h6>
+				<!-- Title -->
+				<h1 class="mb-4">Réservez dès maintenant!</h1>
+				<!-- Info -->
+				<p class="mb-4">Réservez Maintenant, Profitez Plus Tard.</p>
+
+				<!-- Form START -->
+				<form method="post" action="{% url 'user-reserverRestaurant' restaurant.id %}" class="row g-4">
+					
+					{% csrf_token %}
+					<!-- Check in -->
+					<div class="col-md-6">
+						<label for="date_arrivee" class="small">Date d'arrivée</label>
+						<div class="form-border-bottom form-control-transparent d-flex align-items-center">
+							<!-- Icon -->
+							<i class="bi bi-calendar text-secondary d-block me-2"></i>
+							<!-- Cities -->
+							<div class="form-fs-lg">
+								<input type="date" id="date_arrivee" name="date_arrivee" class="form-control flatpickr" data-date-format="d/M/Y" placeholder="Selectionner une date" required>
+							</div>
+						</div>
+					</div>
+
+                    <div class="col-md-6">
+						<label for="heure_arrivee" class="small">Heure d'arrivée</label>
+						<div class="form-border-bottom form-control-transparent d-flex align-items-center">
+							<!-- Icon -->
+							<i class="bi bi-calendar text-secondary d-block me-2"></i>
+							<!-- Cities -->
+							<div class="form-fs-lg">
+								<input type="time" id="heure_arrivee" name="heure_arrivee" class="form-control" placeholder="Sélectionner une heure" required>
+							</div>
+						</div>
+					</div>
+					
+					
+
+					<!-- Occupant -->
+					<div class="col-md-6">
+						<label for="nombre_personnes" class="small">Nombre de personnes</label>
+						<div class="form-border-bottom form-control-transparent d-flex align-items-center">
+							<!-- Icon -->
+							<i class="fa-solid fa-user-group text-secondary d-block me-2"></i>
+							<!-- Cities -->
+							<div class="form-fs-lg">
+								<div class="dropdown guest-selector me-2">
+									<input type="number" min="1" id="nombre_personnes" name="nombre_personnes" class="form-guest-selector form-control selection-result" placeholder="" id="dropdownShare" data-bs-auto-close="outside" data-bs-toggle="dropdown" required>
+								</div>
+							</div>	
+						</div>
+					</div>
+
+					<!-- Tour type -->
+					<div class="col-md-6">
+						<label class="small">Moyen de paiement</label>
+						<div class="form-border-bottom form-control-transparent d-flex align-items-center">
+							<div class="flex-shrink-0 me-2">
+								<!-- Icon -->
+								<i class="bi bi-wallet2"></i>
+							</div>
+							<!-- Input field -->
+							<div class="flex-grow-1">
+								<!-- Cities -->
+								<div class="form-fs-lg">
+									<select type="text" id="moyen_paiement" name="moyen_paiement" class="form-select js-choice h5" data-search-enabled="true" aria-label=".form-select-sm" required>
+										<option value="">Veuillez selectionner</option>
+										<option value="TMoney">TMoney</option>
+										<option value="Flooz money">Flooz money</option>
+										<option></option>
+									</select>
+								</div>	
+							</div>
+						</div>
+					</div>
+
+					<input type="hidden" id="date_du_jour" name="date_du_jour" style="display: none;">
+
+					<!-- Button -->
+					<div class="col-12">
+						<button  type="submit" class="btn btn-primary w-100 mb-0">Réserver</button>
+					</div>
+				</form>	
+				<!-- Form END -->
+			</div>
+			
+			<!-- Image -->
+			<div class="col-lg-6 position-relative">
+				<img src="{% static 'assets/images/category/hotel/resort/3by4/04.jpg' %}" class="rounded" alt="">
+			</div>
+		</div>
+		<!-- Content and Image END -->
+	</div>
+</section>
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        // Initialiser Flatpickr
+        flatpickr("#date_du_jour", {
+            defaultDate: new Date(),
+            dateFormat: "d/M/Y"  // Le format que vous voulez afficher
+        });
+    });
+</script>
+
+<!-- =======================
+Main Banner END -->
+
+
+{% endblock %}

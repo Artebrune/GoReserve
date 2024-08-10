@@ -1,0 +1,323 @@
+{% extends 'frontend/base.html' %}
+
+{% block title %}GoReserve - Validation liste hôtel{% endblock %}
+
+{% block head %}
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+{% endblock %}
+
+{% block content %}
+{% load static %}
+<style>
+    .alert-error {
+        color: red;
+    }
+
+    .alert-success {
+        color: green;
+        text-align: center;
+    }
+    .alert{
+        text-align: center; 
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="{% static 'css/css_style_listeHotel.css' %}">
+
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% endif %}" role="alert">
+        {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+ 
+<div class="col-xl-11 col-xxl-9" style="margin-bottom: 50px; margin-top:20px; margin-left:10px;">
+    <!-- Tabs and search START -->
+ <div class="row g-4 justify-content-between align-items-center" style="margin-top: 0px;margin-bottom: 25px;">
+    <div class="col-lg-5">
+        <!-- Tabs -->
+        <ul class="nav nav-pills-shadow nav-responsive">
+            <li class="nav-item"> 
+                <a class="nav-link mb-0 me-sm-2 active" id="grid-tab" data-bs-toggle="tab" data-bs-target="#grid-tab-pane" type="button" role="tab" aria-controls="grid-tab-pane" aria-selected="true"><i class="bi bi-patch-check-fill me-2 text-danger"></i>En cours de validation</a> 
+            </li>
+            <li class="nav-item">
+               <a class="nav-link mb-0 me-sm-2"id="list-tab" data-bs-toggle="tab" data-bs-target="#list-tab-pane" type="button" role="tab" aria-controls="list-tab-pane" aria-selected="false"><i class="bi bi-patch-check-fill me-2 text-success"></i>Validé</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col-lg-6 col-xxl-5">
+        <div class="d-sm-flex gap-4 justify-content-between justify-content-lg-end">
+            <!-- Search -->
+            <div class="col-md-8">
+                <form class="rounded position-relative">
+                    <input class="form-control bg-transparent" type="search" placeholder="Search" aria-label="Search">
+                    <button class="bg-transparent p-2 position-absolute top-50 end-0 translate-middle-y border-0 text-primary-hover text-reset" type="submit">
+                        <i class="fas fa-search fs-6"></i>
+                    </button>
+                </form>
+            </div>
+            <!-- Tabs -->
+            <!--<div class="d-flex justify-content-end mt-2 mt-sm-0">
+                <ul class="nav nav-pills nav-pills-dark" id="room-pills-tab" role="tablist">
+                     Tab item 
+                    <li class="nav-item">
+                         <button class="nav-link rounded-start rounded-0 active" id="grid-tab" data-bs-toggle="tab" data-bs-target="#grid-tab-pane" type="button" role="tab" aria-controls="grid-tab-pane" aria-selected="true"><i class="bi fa-fw bi-grid-fill"></i></button>
+                    </li>
+                     Tab item 
+                    <li class="nav-item">
+                        <button class="nav-link rounded-end rounded-0" id="list-tab" data-bs-toggle="tab" data-bs-target="#list-tab-pane" type="button" role="tab" aria-controls="list-tab-pane" aria-selected="false"><i class="bi fa-fw bi-list-ul"></i></button>
+                    </li>
+                </ul>
+            </div> -->
+        </div>
+    </div>
+</div>
+<!-- Tabs and search END -->
+<div class="tab-content mt-5" id="myTabContent">
+    <!-- Content item START -->
+    <div class="tab-pane fade show active" id="grid-tab-pane">
+    <div class="vstack gap-4">
+        {% if hotels_valides %}
+        {% for hot in hotels_with_min_price %}
+        <!-- Card item START -->
+        {% if not hot.is_validated %}
+        <div class="card shadow p-2">
+            <div class="row g-0">
+                <!-- Card img -->
+                <div class="col-md-5">
+                    <img src="{% static 'media/' %}{{ hot.photo }}" class="card-img rounded-2" alt="Card image">
+                </div>
+
+                <!-- Card body -->
+                <div class="col-md-7">
+                    <div class="card-body py-md-2 d-flex flex-column h-100">
+                        <!-- Rating and buttons -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <ul class="list-inline mb-0">
+                                {% for _ in hot.afficher_etoiles %}
+                                    <span class="etoile">⭐</span>
+                                {% endfor %}
+                            </ul>
+
+                            <ul class="list-inline mb-0 z-index-2">
+                                <div class="list-inline-item dropdown">
+                                    <a href="#" class="btn btn-sm btn-round btn-light" role="button" id="dropdownAction1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end min-w-auto shadow rounded small" aria-labelledby="dropdownAction{{ hot.id }}">
+                                        <li><a class="dropdown-item edit" href="{% url 'modifierHotel' hotel_id=hot.id %}"><i class="bi bi-pencil-square fa-fw me-2"></i>Modifier</a></li>
+                                        <a class="dropdown-item delete" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ hot.id }}"><i class="bi bi-slash-circle me-2"></i>Supprimer</a></li>
+                                    </ul>
+                                </div>
+                                <li class="list-inline-item dropdown">
+                                    <a href="#" class="btn btn-sm btn-round btn-light" role="button" id="dropdownShare2" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa-solid fa-fw fa-share-alt"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end min-w-auto shadow rounded" aria-labelledby="dropdownShare2">
+                                        <li><a class="dropdown-item" href="#"><i class="fab fa-twitter-square me-2"></i>Twitter</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fab fa-facebook-square me-2"></i>Facebook</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fab fa-linkedin me-2"></i>LinkedIn</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-copy me-2"></i>Copier le lien</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="modal fade" id="deleteModal{{ hot.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel{{ hot.id }}" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="deleteModalLabel{{ hot.id }}">Suppression : {{ hot.nom }}</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p style="font-size : 19px;">Cette action sera irréversible et entraînera la suppression de toutes les données liées à cet hôtel (photos, chambres, ...). Êtes-vous sûr de vouloir supprimer cet hôtel ?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-success-confirm"><a href="{% url 'supprimerHotel' hotel_id=hot.id %}">Confirmer</a></button>
+                                        <button type="button" class="btn btn-danger-cancel" data-bs-dismiss="modal">Annuler</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Title -->
+                        <h5 class="card-title mb-1"><a href="{% url 'detailHotel' hot.id %}">{{ hot.nom }}</a></h5>
+                        <small><i class="bi bi-geo-alt me-2"></i>{{ hot.adresse }}</small>
+                        <!-- Amenities -->
+                        <ul class="nav nav-divider mt-3">
+                            <li class="nav-item">Air Conditioning</li>
+                            <li class="nav-item">Wifi</li>
+                            <li class="nav-item">Kitchen</li>
+                            <li class="nav-item">Pool</li>
+                        </ul>
+
+                            
+                        <ul class="list-group list-group-borderless small mb-0 mt-2">
+                            <li class="list-group-item d-flex text-danger p-0">
+                                <i class="bi bi-patch-check-fill me-2"></i>En cours de validation
+                            </li>
+                        </ul>
+
+
+                        
+                        <!-- Price and Button -->
+                        <div class="d-sm-flex justify-content-sm-between align-items-center mt-3 mt-md-auto">
+                            <!-- Price -->
+                            <div class="d-flex align-items-center">
+                                <h6 class="mb-0 me-1">
+                                    {% if hot.min_price %}
+                                        <p>À partir de : <span style="font-size: 19px;">{{ hot.min_price }}</span> F CFA /<small>nuit</small></p>
+                                    {% else %}
+                                        <p>Aucune chambre disponible</p>
+                                    {% endif %}
+                                </h6>
+                            </div>
+                            <!-- Buttons -->
+                            <div class="mt-3 mt-sm-0">
+                                <a href="#" class="btn btn-sm btn-dark mb-0 w-80 mt-1">Voir detail</a>
+                                {% if not hot.is_validated %}
+                                    <a href="{% url 'validation-accepter-hotel' hotel_id=hot.id %}" class="btn btn-sm btn-success mb-0 w-80 mt-1">Accepter</a>
+                                    <a href="{% url 'validation-refuser-hotel' hotel_id=hot.id %}" class="btn btn-sm btn-danger mb-0 w-80 mt-1">Refuser</a>
+                                {% endif %}
+                            </div>                  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% else %}
+            <p style="margin-top: 90px; text-align : center; font-size : 30px;">Aucun hôtel en cours de validation.</p>
+        {% endif %}
+    </div>
+</div>
+</div>
+
+
+
+
+    <!-- Content item START -->
+    <div class="tab-pane fade" id="list-tab-pane">
+        <div class="vstack gap-4">
+        {% if hotels_valides %}
+        {% for hot in hotels_with_min_price %}
+        <!-- Card item START -->
+        {% if hot.is_validated %}
+        <div class="card shadow p-2">
+            <div class="row g-0">
+                <!-- Card img -->
+                <div class="col-md-5">
+                    <img src="{% static 'media/' %}{{ hot.photo }}" class="card-img rounded-2" alt="Card image">
+                </div>
+
+                <!-- Card body -->
+                <div class="col-md-7">
+                    <div class="card-body py-md-2 d-flex flex-column h-100">
+                        <!-- Rating and buttons -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <ul class="list-inline mb-0">
+                                {% for _ in hot.afficher_etoiles %}
+                                    <span class="etoile">⭐</span>
+                                {% endfor %}
+                            </ul>
+
+                            <ul class="list-inline mb-0 z-index-2">
+                                <div class="list-inline-item dropdown">
+                                    <a href="#" class="btn btn-sm btn-round btn-light" role="button" id="dropdownAction1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end min-w-auto shadow rounded small" aria-labelledby="dropdownAction{{ hot.id }}">
+                                        <li><a class="dropdown-item edit" href="{% url 'modifierHotel' hotel_id=hot.id %}"><i class="bi bi-pencil-square fa-fw me-2"></i>Modifier</a></li>
+                                        <a class="dropdown-item delete" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ hot.id }}"><i class="bi bi-slash-circle me-2"></i>Supprimer</a></li>
+                                    </ul>
+                                </div>
+                                <li class="list-inline-item dropdown">
+                                    <a href="#" class="btn btn-sm btn-round btn-light" role="button" id="dropdownShare2" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa-solid fa-fw fa-share-alt"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end min-w-auto shadow rounded" aria-labelledby="dropdownShare2">
+                                        <li><a class="dropdown-item" href="#"><i class="fab fa-twitter-square me-2"></i>Twitter</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fab fa-facebook-square me-2"></i>Facebook</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fab fa-linkedin me-2"></i>LinkedIn</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-copy me-2"></i>Copier le lien</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="modal fade" id="deleteModal{{ hot.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel{{ hot.id }}" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="deleteModalLabel{{ hot.id }}">Suppression : {{ hot.nom }}</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p style="font-size : 19px;">Cette action sera irréversible et entraînera la suppression de toutes les données liées à cet hôtel (photos, chambres, ...). Êtes-vous sûr de vouloir supprimer cet hôtel ?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-success-confirm"><a href="{% url 'supprimerHotel' hotel_id=hot.id %}">Confirmer</a></button>
+                                        <button type="button" class="btn btn-danger-cancel" data-bs-dismiss="modal">Annuler</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Title -->
+                        <h5 class="card-title mb-1"><a href="{% url 'detailHotel' hot.id %}">{{ hot.nom }}</a></h5>
+                        <small><i class="bi bi-geo-alt me-2"></i>{{ hot.adresse }}</small>
+                        <!-- Amenities -->
+                        <ul class="nav nav-divider mt-3">
+                            <li class="nav-item">Air Conditioning</li>
+                            <li class="nav-item">Wifi</li>
+                            <li class="nav-item">Kitchen</li>
+                            <li class="nav-item">Pool</li>
+                        </ul>
+
+                        <!-- List -->
+
+                        
+                        <ul class="list-group list-group-borderless small mb-0 mt-2">
+                            <li class="list-group-item d-flex text-success p-0">
+                                <i class="bi bi-patch-check-fill me-2"></i>Validé
+                            </li>
+                        </ul>
+
+                        
+                        <!-- Price and Button -->
+                        <div class="d-sm-flex justify-content-sm-between align-items-center mt-3 mt-md-auto">
+                            <!-- Price -->
+                            <div class="d-flex align-items-center">
+                                <h6 class="mb-0 me-1">
+                                    {% if hot.min_price %}
+                                        <p>À partir de : <span style="font-size: 19px;">{{ hot.min_price }}</span> F CFA /<small>nuit</small></p>
+                                    {% else %}
+                                        <p>Aucune chambre disponible</p>
+                                    {% endif %}
+                                </h6>
+                            </div>
+                            <!-- Buttons -->
+                            <div class="mt-3 mt-sm-0">
+                                <a href="#" class="btn btn-sm btn-dark mb-0 w-80 mt-1">Voir detail</a>
+                                {% if not hot.is_validated %}
+                                    <a href="{% url 'validation-accepter-hotel' hotel_id=hot.id %}" class="btn btn-sm btn-success mb-0 w-80 mt-1">Accepter</a>
+                                    <a href="{% url 'validation-refuser-hotel' hotel_id=hot.id %}" class="btn btn-sm btn-danger mb-0 w-80 mt-1">Refuser</a>
+                                {% endif %}
+                            </div>                  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% else %}
+            <p style="margin-top: 210px; text-align : center; font-size : 30px;">Aucun hôtel validé.</p>
+        {% endif %}
+        </div>
+    </div>
+    <!-- Content item END -->
+
+
+{% endblock %}

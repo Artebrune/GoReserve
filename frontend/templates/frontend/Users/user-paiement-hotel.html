@@ -1,0 +1,82 @@
+{% extends 'frontend/Users/user-base.html' %}
+
+{% block title %}GoReserve - Paiement{% endblock %}
+
+{% block head %}
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+{% endblock %}
+
+{% block content %}
+{% load static %}
+<style>
+    .alert{
+        text-align: center;
+		width : 75%; 
+		margin-left: 145px;
+		font-size: 18px;
+    }
+</style>
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% endif %}" role="alert">
+        {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+<!-- =======================
+Main content START -->
+<section class="pt-4">
+	<div class="container">
+		<div class="row">
+			<div class="card border mt-4">
+                <div class="card-header border-bottom">
+                    <h5 class="card-header-title" style="text-align: center;">Paiement</h5>
+                </div>
+                
+                <div class="card-body">
+                    <form class="row text-start g-4" method="post" action="{% url 'user-paiement-hotel' reservation.id %}">
+                        {% csrf_token %}
+                        <!-- Card number -->
+                        <div class="col-12">
+                            <label class="form-label">Votre Numéro de téléphone<span class="text-danger">*</span></label>
+                            <div class="position-relative">
+                                <input type="text" name="votre_numero_telephone" id="votre_numero_telephone" class="form-control" placeholder="xxxx xxxx xxxx xxxx" >
+                                {% if reservation.moyen_paiement == "TMoney" %}
+                                    <img src="{% static 'assets/images/element/tmoney.svg' %}" style="width:80px" class="h-30px position-absolute top-50 end-0 translate-middle-y me-2 d-none d-sm-block" alt="">
+                                {% elif reservation.moyen_paiement == "Flooz money" %}
+                                    <img src="{% static 'assets/images/element/flooz.svg' %}" style="width:80px" class="h-30px position-absolute top-50 end-0 translate-middle-y me-2 d-none d-sm-block" alt="">
+                                {% endif %}
+                                </div>	
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Numéro de téléphone destinataire<span class="text-danger">*</span></label>
+                            <div class="position-relative">
+                                <input type="text" name="numero_telephone_destinataire" id="numero_telephone_destinataire" class="form-control" placeholder="xxxx xxxx xxxx xxxx"  value="{{ reservation.chambre.hotel.coordonnees_tel }}" >
+                                {% if reservation.moyen_paiement == "TMoney" %}
+                                    <img src="{% static 'assets/images/element/tmoney.svg' %}" style="width:80px" class="h-30px position-absolute top-50 end-0 translate-middle-y me-2 d-none d-sm-block" alt="">
+                                {% elif reservation.moyen_paiement == "Flooz money" %}
+                                    <img src="{% static 'assets/images/element/flooz.svg' %}" style="width:80px" class="h-30px position-absolute top-50 end-0 translate-middle-y me-2 d-none d-sm-block" alt="">
+                                {% endif %}
+                                </div>	
+                        </div>
+                        <!-- Expiration Date -->
+                        
+                        <div class="col-12">
+                            <label class="form-label">Montant à payer<span class="text-danger">*</span></label>
+                            <input type="text" name="montant" id="montant" class="form-control" aria-label="name of card holder" placeholder="Enter name" value="{{ reservation.prix_total }}">
+                        </div>
+                        <!-- Button -->
+                        <div class="col-12">
+                            <button class="btn btn-primary mb-0" type="submit">Effectuer le paiement</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+		</div>
+	</div>
+</section>
+<!-- =======================
+Main content START -->
+
+
+{% endblock %}

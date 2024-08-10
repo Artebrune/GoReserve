@@ -1,0 +1,136 @@
+{% extends 'frontend/base.html' %}
+
+{% block title %}GoReserve - Detail chambre{% endblock %}
+
+{% block head %}
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+{% endblock %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/css_style_detailChambre.css' %}">
+<!-- Page main content START -->
+<div class="page-content-wrapper p-xxl-4">
+			<!-- Title -->
+			<div class="row">
+				<div class="col-12 mb-4 mb-sm-5">
+					<div class="d-sm-flex justify-content-between align-items-center">
+						<h1 class="h3 mb-2 mb-sm-0">{{chambre.nom}}</h1>
+                        <a href="#" class="btn btn-red-soft text-nowrap mb-0" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa fa-ban" aria-hidden="true"></i> Supprimer Chambre</a>	
+                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1 class="modal-title fs-5" id="staticBackdropLabel">Suppression : {{chambre.nom}}</h1>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p style="font-size : 19px;">cette action sera irréversible et entrainera la supression de tous les donnees liee a cette chambre. Êtes-vous sûr de vouloir supprimer cette chambre ?</p>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-success-confirm"><a href="{% url "supprimerChambre" chambre.id%}">Confirmer</a></button>
+                                  <button type="button" class="btn btn-danger-cancel" data-bs-dismiss="modal">Annuler</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+						<a href="{% url "modifierChambre" chambre.id%}" class="btn btn-primary-soft text-nowrap mb-0"><i class="bi bi-pencil-square fa-fw"></i> Modifier Chambre</a>						
+					</div>
+				</div>
+			</div>
+
+			<!-- Booking detail START -->
+			<div class="row g-4 g-xl-5">
+				<!-- Image -->
+				<div class="col-xxl-6">
+					<div class="row g-2 g-sm-4">
+                        {% if photos|length >= 1 %}
+							{% for photo in photos %}
+                                    <div class="col-6">
+                                        <a data-glightbox data-gallery="gallery" href="{% static 'media/' %}{{ photo.image }}">
+                                            <div class="card card-element-hover card-overlay-hover overflow-hidden">
+                                                <!-- Image -->
+                                                <img src="{% static 'media/' %}{{ photo.image }}" class="rounded-3" alt="">
+                                                <!-- Full screen button -->
+                                                <div class="hover-element w-100 h-100">
+                                                    <i class="bi bi-fullscreen fs-6 text-white position-absolute top-50 start-50 translate-middle bg-dark rounded-1 p-2 lh-1"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+							{% endfor %}
+                        {% endif %}
+					</div>
+				</div>
+
+				<!-- Content -->
+                <div class="hstack gap-2 mb-2">
+                    <h4 class="fw-normal mb-0"><span style="color: rgb(22, 177, 22);">{{chambre.tarif_par_nuit}} F CFA</span></h4>
+                    <span style="font-size: 19px;"> / nuit</span>
+                </div>
+				<div class="col-xxl-6">
+					<h4><span class="fw-light">Hotel: </span>{{chambre.hotel.nom}}</h4>
+					<p class="fw-bold"><i class="bi bi-geo-alt me-2"></i>{{chambre.hotel.adresse}}</p>
+                    
+					<p class="mb-4">{{chambre.description}}</p>
+
+					<!-- Feature -->
+					<div class="row g-4">
+						<div class="col-sm-6 col-md-4">
+							<div class="d-flex align-items-center">
+								<div class="icon-lg bg-primary bg-opacity-10 text-primary rounded-2"><i class="fa-solid fa-bed"></i></div>
+								<div class="ms-2">
+									<small>Type</small>
+									<h6 class="mb-0 mt-1">{{chambre.type_de_chambre}}</h6>
+								</div>
+							</div>
+						</div>
+
+						<!--<div class="col-sm-6 col-md-4">
+							<div class="d-flex align-items-center">
+								<div class="icon-lg bg-primary bg-opacity-10 text-primary rounded-2"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+								<div class="ms-2">
+									<small>Side</small>
+									<h6 class="mb-0 mt-1">Left Side</h6>
+								</div>
+							</div>
+						</div>-->
+
+						<div class="col-sm-6 col-md-4">
+							<div class="d-flex align-items-center">
+								<div class="icon-lg bg-primary bg-opacity-10 text-primary rounded-2"><i class="fa-solid fa-stairs"></i></div>
+								<div class="ms-2">
+									<small>Emplacement</small>
+									<h6 class="mb-0 mt-1">{{chambre.emplacement}} e étage</h6>
+								</div>
+							</div>
+						</div>
+
+                        {% if chambre.vue_sur_mer == 'oui' %}
+                            <div class="col-sm-6 col-md-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-lg bg-primary bg-opacity-10 text-primary rounded-2"><i class="fa-solid fa-mountain-sun"></i></div>
+                                    <div class="ms-2">
+                                        <small>Vue</small>
+                                        <h6 class="mb-0 mt-1">Vue sur mer</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+						<div class="col-sm-6 col-md-4">
+							<div class="d-flex align-items-center">
+								<div class="icon-lg bg-primary bg-opacity-10 text-primary rounded-2"><i class="fa-regular fa-clone"></i></div>
+								<div class="ms-2">
+									<small>taille</small>
+									<h6 class="mb-0 mt-1">{{chambre.surface}} m2</h6>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+            </div>
+	</div>
+
+		<!-- Page main content END -->
+{% endblock %}

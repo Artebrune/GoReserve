@@ -1,0 +1,286 @@
+{% extends 'frontend/base.html' %}
+
+{% block title %}
+  GoReserve - Modifier Prestation Restaurant
+{% endblock %}
+
+{% block head %}
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+{% endblock %}
+
+{% block content %}
+  {% load static %}
+  <div class="page-content-wrapper p-xxl-4">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/css_formulairePrestationRestaurant.css' %}" />
+    <div class="wrapper">
+      <div>
+        <h3>Modifier Prestation Restaurant</h3>
+      </div>
+      <div class="header">
+        <ul>
+          <li class="active form_1_progessbar">
+            <div>
+              <p>1</p>
+            </div>
+          </li>
+          <li class="form_2_progessbar">
+            <div>
+              <p>2</p>
+            </div>
+          </li>
+          <li class="form_3_progessbar">
+            <div>
+              <p>3</p>
+            </div>
+          </li>
+          <li class="form_4_progessbar">
+            <div>
+              <p>4</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="form_wrap">
+        <form method="post" action="">
+          {% csrf_token %}
+          <!-- On suppose que `prestation` contient les données existantes à modifier -->
+          <div class="form_1 data_info">
+            {% for prestation in prestations %}
+            <h4>Étape 1 : Services Spéciales & Réception d'événements</h4>
+            <div class="input_wrap" id="restaurantInput">
+              <label for="restaurant" id="labelRestaurant">Restaurant :</label>
+              <select id="restaurant" name="restaurant" required class="input">
+                {% for restaurant in restaurants %}
+                  <option value="{{ restaurant.id }}" {% if restaurant.id == prestation.restaurant.id %} selected {% endif %}>{{ restaurant.nom }}</option>
+                {% endfor %}
+              </select><br /><br />
+            </div>
+            <div class="form_container">
+              <div class="input_wrap">
+                <label for="diners_avec_spectacle" id="labelDinersAvecSpectacle">Dîners avec spectacle :</label>
+                <div id="radioDinersAvecSpectacle">
+                  <input type="radio" id="diners_avec_spectacle_oui" name="diners_avec_spectacle" value="oui" class="input" {% if prestation.services.diners_avec_spectacle %} checked {% endif %} />
+                  <label for="diners_avec_spectacle_oui">Oui</label><br />
+                  <input type="radio" id="diners_avec_spectacle_non" name="diners_avec_spectacle" value="non" class="input" {% if not prestation.services.diners_avec_spectacle %} checked {% endif %} />
+                  <label for="diners_avec_spectacle_non">Non</label>
+                </div>
+              </div>
+              <div class="input_wrap">
+                <label for="soirees_a_theme" id="labelSoireesATheme">Soirées à thème :</label>
+                <div id="radioSoireesATheme">
+                  <input type="radio" id="soirees_a_theme_oui" name="soirees_a_theme" value="oui" class="input" {% if prestation.services.soirees_a_theme %} checked {% endif %} />
+                  <label for="soirees_a_theme_oui">Oui</label><br />
+                  <input type="radio" id="soirees_a_theme_non" name="soirees_a_theme" value="non" class="input" {% if not prestation.services.soirees_a_theme %} checked {% endif %} />
+                  <label for="soirees_a_theme_non">Non</label>
+                </div>
+              </div>
+              <div class="input_wrap">
+                <label for="menus_degustation" id="labelMenusDegustation">Menus dégustation :</label>
+                <div id="radioMenusDegustation">
+                  <input type="radio" id="menus_degustation_oui" name="menus_degustation" value="oui" class="input" {% if not prestation.services.menus_degustation %} checked {% endif %} />
+                  <label for="menus_degustation_oui">Oui</label><br />
+                  <input type="radio" id="menus_degustation_non" name="menus_degustation" value="non" class="input" {% if not prestation.services.menus_degustation %} checked {% endif %} />
+                  <label for="menus_degustation_non">Non</label>
+                </div>
+              </div>
+              <div class="input_wrap">
+                <label for="diners_prives" id="labelDinersPrives">Dîners privés :</label>
+                <div id="radioDinersPrives">
+                  <input type="radio" id="diners_prives_oui" name="diners_prives" value="oui" class="input" {% if prestation.services.diners_prives %} checked {% endif %} />
+                  <label for="diners_prives_oui">Oui</label><br />
+                  <input type="radio" id="diners_prives_non" name="diners_prives" value="non" class="input" {% if not prestation.services.diners_prives %} checked {% endif %} />
+                  <label for="diners_prives_non">Non</label>
+                </div>
+              </div>
+              <div class="input_wrap">
+                <label for="programmes_de_fidelite" id="labelProgrammesDeFidelite">Programmes de fidélité :</label>
+                <div id="radioProgrammesDeFidelite">
+                  <input type="radio" id="programmes_de_fidelite_oui" name="programmes_de_fidelite" value="oui" class="input" {% if prestation.services.programmes_de_fidelite %} checked {% endif %} />
+                  <label for="programmes_de_fidelite_oui">Oui</label><br />
+                  <input type="radio" id="programmes_de_fidelite_non" name="programmes_de_fidelite" value="non" class="input" {% if not prestation.services.programmes_de_fidelite %} checked {% endif %} />
+                  <label for="programmes_de_fidelite_non">Non</label>
+                </div>
+              </div>
+              <div class="input_wrap">
+                <label for="anniversaire" id="labelAnniversaire">Anniversaire :</label>
+                <div id="radioAnniversaire">
+                  <input type="radio" id="anniversaire_oui" name="anniversaire" value="oui" class="input" {% if prestation.services.anniversaire %} checked {% endif %} />
+                  <label for="anniversaire_oui">Oui</label><br />
+                  <input type="radio" id="anniversaire_non" name="anniversaire" value="non" class="input" {% if not prestation.services.anniversaire %} checked {% endif %} />
+                  <label for="anniversaire_non">Non</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form_2 data_info" style="display: none;">
+            <h4>Étape 2 : Type de cuisine</h4>
+            <div class="form_container">
+              <div class="input_wrap">
+                <label for="mexicaine" id="labelMexicaine">Mexicaine :</label>
+                <div id="radioMexicaine">
+                  <input type="radio" id="mexicaine_oui" name="mexicaine" value="oui" class="input" {% if prestation.types_de_cuisine.mexicaine %} checked {% endif %} />
+                  <label for="mexicaine_oui">Oui</label><br />
+                  <input type="radio" id="mexicaine_non" name="mexicaine" value="non" class="input" {% if not prestation.types_de_cuisine.mexicaine %} checked {% endif %} />
+                  <label for="mexicaine_non">Non</label>
+                </div>
+              </div>
+              <div class="input_wrap">
+                <label for="chinoise" id="labelChinoise">Chinoise :</label>
+                <div id="radioChinoise">
+                  <input type="radio" id="chinoise_oui" name="chinoise" value="oui" class="input" {% if prestation.types_de_cuisine.chinoise %} checked {% endif %} />
+                  <label for="chinoise_oui">Oui</label><br />
+                  <input type="radio" id="chinoise_non" name="chinoise" value="non" class="input" {% if not prestation.types_de_cuisine.chinoise %} checked {% endif %} />
+                  <label for="chinoise_non">Non</label>
+                </div>
+              </div>
+              <div class="input_wrap">
+                <label for="japonaise" id="labelJaponaise">Japonaise :</label>
+                <div id="radioJaponaise">
+                  <input type="radio" id="japonaise_oui" name="japonaise" value="oui" class="input" {% if prestation.types_de_cuisine.japonaise %} checked {% endif %}/>
+                  <label for="japonaise_oui">Oui</label><br />
+                  <input type="radio" id="japonaise_non" name="japonaise" value="non" class="input" {% if not prestation.types_de_cuisine.japonaise %} checked {% endif %}/>
+                  <label for="japonaise_non">Non</label>
+                </div>
+              </div>
+              <div class="input_wrap">
+                <label for="française" id="labelFrançaise">Française :</label>
+                <div id="radioFrançaise">
+                  <input type="radio" id="française_oui" name="française" value="oui" class="input" {% if prestation.types_de_cuisine.française %} checked {% endif %}/>
+                  <label for="française_oui">Oui</label><br />
+                  <input type="radio" id="française_non" name="française" value="non" class="input" {% if not prestation.types_de_cuisine.française %} checked {% endif %}/>
+                  <label for="française_non">Non</label>
+                </div>
+              </div>
+              <div class="input_wrap">
+                <label for="africaine" id="labelAfricaine">Africaine :</label>
+                <div id="radioAfricaine">
+                  <input type="radio" id="africaine_oui" name="africaine" value="oui" class="input" {% if prestation.types_de_cuisine.africaine %} checked {% endif %}/>
+                  <label for="africaine_oui">Oui</label><br />
+                  <input type="radio" id="africaine_non" name="africaine" value="non" class="input" {% if not prestation.types_de_cuisine.africaine %} checked {% endif %}/>
+                  <label for="africaine_non">Non</label>
+                </div>
+              </div>
+              <div class="input_wrap">
+                <label for="autres" id="labelAutres">Autres :</label>
+                <div id="radioAutres">
+                  <input type="radio" id="autres_oui" name="autres" value="oui" class="input" {% if prestation.types_de_cuisine.autres %} checked {% endif %}/>
+                  <label for="autres_oui">Oui</label><br />
+                  <input type="radio" id="autres_non" name="autres" value="non" class="input" {% if not prestation.types_de_cuisine.autres %} checked {% endif %}/>
+                  <label for="autres_non">Non</label>
+                </div>
+              </div>
+            </div>
+          </div>
+            <div class="form_3 data_info" style="display: none;">
+                <h4>Etape 3 : Langue du personnel</h4>
+                <div class="form_container">
+                    <div class="input_wrap">
+                        <label for="anglais" id="labelAnglais">Anglais :</label>
+                        <div id="radioAnglais">
+                            <input type="radio" id="anglais_oui" name="anglais" value="oui" {% if prestation.langues_personnel.anglais%}checked{% endif %} class="input">
+                            <label for="anglais_oui">Oui</label><br>
+                            <input type="radio" id="anglais_non" name="anglais" value="non" {% if not prestation.langues_personnel.anglais %}checked{% endif %} class="input">
+                            <label for="anglais_non">Non</label>
+                        </div>
+                    </div>
+                    
+                    <div class="input_wrap">
+                        <label for="espagnol" id="labelEspagnol">Espagnol :</label>
+                        <div id="radioEspagnol">
+                            <input type="radio" id="espagnol_oui" name="espagnol" value="oui" {% if prestation.langues_personnel.espagnol%}checked{% endif %} class="input">
+                            <label for="espagnol_oui">Oui</label><br>
+                            <input type="radio" id="espagnol_non" name="espagnol" value="non" {% if not prestation.langues_personnel.espagnol%}checked{% endif %} class="input">
+                            <label for="espagnol_non">Non</label>
+                        </div>
+                    </div>
+                    
+                    <div class="input_wrap">
+                        <label for="francais" id="labelFrancais">Français :</label>
+                        <div id="radioFrancais">
+                            <input type="radio" id="francais_oui" name="francais" value="oui" {% if prestation.langues_personnel.francais%}checked{% endif %} class="input">
+                            <label for="francais_oui">Oui</label><br>
+                            <input type="radio" id="francais_non" name="francais" value="non" {% if not prestation.langues_personnel.francais%}checked{% endif %} class="input">
+                            <label for="francais_non">Non</label>
+                        </div>
+                    </div>
+                    
+                    <div class="input_wrap">
+                        <label for="allemand" id="labelAllemand">Allemand :</label>
+                        <div id="radioAllemand">
+                            <input type="radio" id="allemand_oui" name="allemand" value="oui" {% if prestation.langues_personnel.allemand%}checked{% endif %} class="input">
+                            <label for="allemand_oui">Oui</label><br>
+                            <input type="radio" id="allemand_non" name="allemand" value="non" {% if not prestation.langues_personnel.allemand%}checked{% endif %} class="input">
+                            <label for="allemand_non">Non</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form_4 data_info" style="display: none;">
+                <h4>Etape 4 : Méthodes de paiement</h4>
+                <div class="form_container">
+                    <div class="input_wrap">
+                        <label for="carte_de_credit" id="labelCarteDeCredit">Carte de crédit (Visa, MasterCard) :</label>
+                        <div id="radioCarteDeCredit">
+                            <input type="radio" id="carte_de_credit_oui" name="carte_de_credit" value="oui" {% if prestation.methodes_paiement.carte_de_credit%}checked{% endif %} class="input">
+                            <label for="carte_de_credit_oui">Oui</label><br>
+                            <input type="radio" id="carte_de_credit_non" name="carte_de_credit" value="non" {% if not prestation.methodes_paiement.carte_de_credit%}checked{% endif %} class="input">
+                            <label for="carte_de_credit_non">Non</label>
+                        </div>
+                    </div>
+                    
+                    <div class="input_wrap">
+                        <label for="especes" id="labelEspeces">Espèces :</label>
+                        <div id="radioEspeces">
+                            <input type="radio" id="especes_oui" name="especes" value="oui" {% if prestation.methodes_paiement.especes%}checked{% endif %} class="input">
+                            <label for="especes_oui">Oui</label><br>
+                            <input type="radio" id="especes_non" name="especes" value="non" {% if not prestation.methodes_paiement.especes%}checked{% endif %} class="input">
+                            <label for="especes_non">Non</label>
+                        </div>
+                    </div>
+                    
+                    <div class="input_wrap">
+                        <label for="carte_de_debit" id="labelCarteDeDebit">Carte de débit :</label>
+                        <div id="radioCarteDeDebit">
+                            <input type="radio" id="carte_de_debit_oui" name="carte_de_debit" value="oui" {% if prestation.methodes_paiement.carte_de_debit%}checked{% endif %} class="input">
+                            <label for="carte_de_debit_oui">Oui</label><br>
+                            <input type="radio" id="carte_de_debit_non" name="carte_de_debit" value="non" {% if not prestation.methodes_paiement.carte_de_debit%}checked{% endif %} class="input">
+                            <label for="carte_de_debit_non">Non</label>
+                        </div>
+                    </div>
+                    
+                    <div class="input_wrap">
+                        <label for="mobile_money" id="labelMobileMoney">Mobile Money :</label>
+                        <div id="radioMobileMoney">
+                            <input type="radio" id="mobile_money_oui" name="mobile_money" value="oui" {% if prestation.methodes_paiement.mobile_money %}checked{% endif %} class="input">
+                            <label for="mobile_money_oui">Oui</label><br>
+                            <input type="radio" id="mobile_money_non" name="mobile_money" value="non" {% if not prestation.methodes_paiement.mobile_money %}checked{% endif %} class="input">
+                            <label for="mobile_money_non">Non</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="btns_wrap">
+                <div class="common_btns form_1_btns">
+                    <button type="button" class="btn_next">Suivant <span class="icon"><ion-icon name="arrow-forward-sharp"></ion-icon></span></button>
+                </div>
+                <div class="common_btns form_2_btns" style="display: none;">
+                    <button type="button" class="btn_back"><span class="icon"><ion-icon name="arrow-back-sharp"></ion-icon></span>Précédent</button>
+                    <button type="button" class="btn_next">Suivant <span class="icon"><ion-icon name="arrow-forward-sharp"></ion-icon></span></button>
+                </div>
+                <div class="common_btns form_3_btns" style="display: none;">
+                    <button type="button" class="btn_back"><span class="icon"><ion-icon name="arrow-back-sharp"></ion-icon></span>Précédent</button>
+                    <button type="button" class="btn_next">Suivant <span class="icon"><ion-icon name="arrow-forward-sharp"></ion-icon></span></button>
+                </div>
+                <div class="common_btns form_4_btns" style="display: none;">
+                    <button type="button" class="btn_back"><span class="icon"><ion-icon name="arrow-back-sharp"></ion-icon></span>Précédent</button>
+                    <button type="submit" class="btn_done">Enregistrer</button>
+                </div>
+                {% endfor %}
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript" src="{% static 'js/js_formulairePrestationRestaurant.js' %}"></script>
+</div>
+{% endblock %}

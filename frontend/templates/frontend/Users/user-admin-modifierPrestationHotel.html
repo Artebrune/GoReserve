@@ -1,0 +1,343 @@
+{% extends 'frontend/Users/user-base-admin.html' %}
+
+{% block title %}GoReserve - Modifier Prestation{% endblock %}
+
+{% block head %}
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+{% endblock %}
+
+{% block content %}
+{%load static%}
+<div class="page-content-wrapper p-xxl-4">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/css_formulairePrestationHotel.css' %}">
+<div class="wrapper">
+    <div>
+        <h3>Modifier Prestation</h3>
+    </div>
+    <div class="header">
+        <ul>
+            <li class="active form_1_progessbar">
+                <div>
+                    <p>1</p>
+                </div>
+            </li>
+            <li class="form_2_progessbar">
+                <div>
+                    <p>2</p>
+                </div>
+            </li>
+            <li class="form_3_progessbar">
+                <div>
+                    <p>3</p>
+                </div>
+            </li>
+            <li class="form_4_progessbar">
+                <div>
+                    <p>4</p>
+                </div>
+            </li>
+            <li class="form_5_progessbar">
+                <div>
+                    <p>5</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="form_wrap">
+        <form method="post"  action="">
+			{% csrf_token %}
+            <div class="form_1 data_info">
+            {% for prestation in prestations %}
+                <h4>Etape 1 : Activités</h4>
+                <div class="input_wrap" id="hotelInput">
+                    <label for="hotel" id="labelHotel">Hôtel :</label>
+                    <select id="hotel" name="hotel" required class="form-select js-choice" data-search-enabled="true">
+                    {% for hotel in hotels %}
+                        <option value="{{ hotel.id }}" {% if prestation.hotel.id == hotel.id %}selected{% endif %}>{{ hotel.nom }}</option>
+                    {% endfor %}
+                    </select><br><br>
+                </div>
+                <div class="form_container">
+                    <div class="input_wrap">
+                        <label for="piscine" id="labelPiscine">Piscine :</label>
+                        <div id="radioPiscine">
+                            <input type="radio" id="piscine_oui" name="piscine" value="oui" {% if prestation.activites.piscine %}checked{% endif %} class="input">
+                            <label for="piscine_oui">Oui</label><br>
+                            <input type="radio" id="piscine_non" name="piscine" value="non" {% if not prestation.activites.piscine %}checked{% endif %} class="input">
+                            <label for="piscine_non">Non</label>
+                        </div>
+                    </div>
+                    <div class="input_wrap">
+                        <label for="spa" id="labelSpa">Spa :</label>
+                        <div id="radioSpa">
+                            <input type="radio" id="spa_oui" name="spa" value="oui" {% if prestation.activites.spa %}checked{% endif %} class="input">
+                            <label for="spa_oui">Oui</label><br>
+                            <input type="radio" id="spa_non" name="spa" value="non" {% if not prestation.activites.spa %}checked{% endif %} class="input">
+                            <label for="spa_non">Non</label>
+                        </div>
+                    </div>
+                    <div class="input_wrap">
+                        
+                        <label for="salle_de_sport" id="labelSalleDeSport">Salle de sport :</label>
+                        <div id="radioSalleDeSport">
+                            <input type="radio" id="salle_de_sport_oui" name="salle_de_sport" value="oui" {% if prestation.activites.salle_de_sport %}checked{% endif %} class="input">
+                            <label for="salle_de_sport_oui">Oui</label><br>
+                            <input type="radio" id="salle_de_sport_non" name="salle_de_sport" value="non" {% if not prestation.activites.salle_de_sport %}checked{% endif %} class="input">
+                            <label for="salle_de_sport_non">Non</label>
+                        </div>
+                    </div>
+                    <div class="input_wrap">
+                        <label for="aire_de_jeux" id="labelAireDeJeux">Aire de jeux pour enfants :</label>
+                        <div id="radioAireDeJeux">
+                            <input type="radio" id="aire_de_jeux_oui" name="aire_de_jeux" value="oui" {% if prestation.activites.aire_de_jeux %}checked{% endif %} class="input">
+                            <label for="aire_de_jeux_oui">Oui</label><br>
+                            <input type="radio" id="aire_de_jeux_non" name="aire_de_jeux" value="non" {% if not prestation.activites.aire_de_jeux %}checked{% endif %} class="input">
+                            <label for="aire_de_jeux_non">Non</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form_2 data_info" style="display: none;">
+                <h4>Etape 2 : Services</h4>
+                <div class="form_container">
+                    <div class="input_wrap">
+                        <label for="nettoyage_a_sec" id="labelNettoyageASec">Nettoyage à sec :</label>
+                        <div id="radioNettoyageASec">
+                            <input type="radio" id="nettoyage_a_sec_oui" name="nettoyage_a_sec" value="oui" {% if prestation.services.nettoyage_a_sec %}checked{% endif %} class="input">
+                            <label for="nettoyage_a_sec_oui">Oui</label><br>
+                            <input type="radio" id="nettoyage_a_sec_non" name="nettoyage_a_sec" value="non" {% if not prestation.services.nettoyage_a_sec %}checked{% endif %} class="input">
+                            <label for="nettoyage_a_sec_non">Non</label>
+                        </div>
+                    </div>
+                    <div class="input_wrap">
+                        <label for="service_de_chambre" id="labelServiceDeChambre">Service de chambre :</label>
+                        <div id="radioServiceDeChambre">
+                            <input type="radio" id="service_de_chambre_oui" name="service_de_chambre" value="oui" {% if prestation.services.service_de_chambre %}checked{% endif %} class="input">
+                            <label for="service_de_chambre_oui">Oui</label><br>
+                            <input type="radio" id="service_de_chambre_non" name="service_de_chambre" value="non" {% if not prestation.services.service_de_chambre %}checked{% endif %} class="input">
+                            <label for="service_de_chambre_non">Non</label>
+                        </div>
+                    </div>
+                    
+                    <div class="input_wrap">
+                        <label for="service_special" id="labelServiceSpecial">Service spécial :</label>
+                        <div id="radioServiceSpecial">
+                            <input type="radio" id="service_special_oui" name="service_special" value="oui" {% if prestation.services.service_special %}checked{% endif %} class="input">
+                            <label for="service_special_oui">Oui</label><br>
+                            <input type="radio" id="service_special_non" name="service_special" value="non" {% if not prestation.services.service_special %}checked{% endif %} class="input">
+                            <label for="service_special_non">Non</label>
+                        </div>
+                    </div>
+                    
+                    <div class="input_wrap">
+                        <label for="aire_dattente" id="labelAireDAttente">Aire d'attente :</label>
+                        <div id="radioAireDAttente">
+                            <input type="radio" id="aire_dattente_oui" name="aire_dattente" value="oui" {% if prestation.services.aire_dattente %}checked{% endif %} class="input">
+                            <label for="aire_dattente_oui">Oui</label><br>
+                            <input type="radio" id="aire_dattente_non" name="aire_dattente" value="non" {% if not prestation.services.aire_dattente %}checked{% endif %} class="input">
+                            <label for="aire_dattente_non">Non</label>
+                        </div>
+                    </div>
+                    
+                    <div class="input_wrap">
+                        <label for="concierge" id="labelConcierge">Concierge :</label>
+                        <div id="radioConcierge">
+                            <input type="radio" id="concierge_oui" name="concierge" value="oui" {% if prestation.services.concierge %}checked{% endif %} class="input">
+                            <label for="concierge_oui">Oui</label><br>
+                            <input type="radio" id="concierge_non" name="concierge" value="non" {% if not prestation.services.concierge %}checked{% endif %} class="input">
+                            <label for="concierge_non">Non</label>
+                        </div>
+                    </div>
+                    
+                    <div class="input_wrap">
+                        <label for="service_de_repassage" id="labelServiceDeRepassage">Service de repassage :</label>
+                        <div id="radioServiceDeRepassage">
+                            <input type="radio" id="service_de_repassage_oui" name="service_de_repassage" value="oui" {% if prestation.services.service_de_repassage %}checked{% endif %} class="input">
+                            <label for="service_de_repassage_oui">Oui</label><br>
+                            <input type="radio" id="service_de_repassage_non" name="service_de_repassage" value="non" {% if not prestation.services.service_de_repassage %}checked{% endif %} class="input">
+                            <label for="service_de_repassage_non">Non</label>
+                        </div>
+                    </div>
+
+                    <div class="input_wrap">
+                        <label for="wifi_gratuit" id="labelWifiGratuit">Wifi gratuit :</label>
+                        <div id="radioWifiGratuit">
+                            <input type="radio" id="wifi_gratuit_oui" name="wifi_gratuit" value="oui" {% if prestation.services.wifi_gratuit %}checked{% endif %} class="input">
+                            <label for="wifi_gratuit_oui">Oui</label><br>
+                            <input type="radio" id="wifi_gratuit_non" name="wifi_gratuit" value="non" {% if not prestation.services.wifi_gratuit %}checked{% endif %} class="input">
+                            <label for="wifi_gratuit_non">Non</label>
+                        </div>
+                    </div>
+                    
+                    <div class="input_wrap">
+                        <label for="ascenseur" id="labelAscenseur">Ascenseur :</label>
+                        <div id="radioAscenseur">
+                            <input type="radio" id="ascenseur_oui" name="ascenseur" value="oui" {% if prestation.services.ascenseur %}checked{% endif %} class="input">
+                            <label for="ascenseur_oui">Oui</label><br>
+                            <input type="radio" id="ascenseur_non" name="ascenseur" value="non" {% if not prestation.services.ascenseur %}checked{% endif %} class="input">
+                            <label for="ascenseur_non">Non</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form_3 data_info" style="display: none;">
+                <h4>Etape 3 : Réception d'événements et salles de conférence</h4>
+                <div class="form_container">
+                    <div class="input_wrap">
+                        <label for="reception_evenements" id="labelReceptionEvenements">Réception d'événements :</label>
+                        <div id="radioReceptionEvenements">
+                            <input type="radio" id="reception_evenements_oui" name="reception_evenements" value="oui" {% if prestation.reception_evenements.reception_evenements %}checked{% endif %} class="input">
+                            <label for="reception_evenements_oui">Oui</label><br>
+                            <input type="radio" id="reception_evenements_non" name="reception_evenements" value="non" {% if not prestation.reception_evenements.reception_evenements %}checked{% endif %} class="input">
+                            <label for="reception_evenements_non">Non</label>
+                        </div>
+                    </div>
+                    
+                    <div class="input_wrap">
+                        <label for="salle_conference" id="labelSalleConference">Salle de conférence :</label>
+                        <div id="radioSalleConference">
+                            <input type="radio" id="salle_conference_oui" name="salle_conference" value="oui"  {% if prestation.reception_evenements.salle_conference %}checked{% endif %} class="input">
+                            <label for="salle_conference_oui">Oui</label><br>
+                            <input type="radio" id="salle_conference_non" name="salle_conference" value="non" {% if not prestation.reception_evenements.salle_conference %}checked{% endif %} class="input">
+                            <label for="salle_conference_non">Non</label>
+                        </div>
+                    </div>
+                    
+                    <div class="input_wrap">
+                        <label for="salle_reunion" id="labelSalleReunion">Salle de réunion :</label>
+                        <div id="radioSalleReunion">
+                            <input type="radio" id="salle_reunion_oui" name="salle_reunion" value="oui" {% if prestation.reception_evenements.salle_reunion %}checked{% endif %} class="input">
+                            <label for="salle_reunion_oui">Oui</label><br>
+                            <input type="radio" id="salle_reunion_non" name="salle_reunion" value="non" {% if not prestation.reception_evenements.salle_reunion %}checked{% endif %} class="input">
+                            <label for="salle_reunion_non">Non</label>
+                        </div>
+                    </div>
+                    
+                    <div class="input_wrap">
+                        <label for="equipement_audiovisuel" id="labelEquipementAudiovisuel">Équipement audiovisuel :</label>
+                        <div id="radioEquipementAudiovisuel">
+                            <input type="radio" id="equipement_audiovisuel_oui" name="equipement_audiovisuel" value="oui" {% if prestation.reception_evenements.equipement_audiovisuel %}checked{% endif %} class="input">
+                            <label for="equipement_audiovisuel_oui">Oui</label><br>
+                            <input type="radio" id="equipement_audiovisuel_non" name="equipement_audiovisuel" value="non" {% if not prestation.reception_evenements.equipement_audiovisuel %}checked{% endif %} class="input">
+                            <label for="equipement_audiovisuel_non">Non</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form_4 data_info" style="display: none;">
+                <h4>Etape 4 : Langue du personnel</h4>
+                <div class="form_container">
+                    <div class="input_wrap">
+                        <label for="anglais" id="labelAnglais">Anglais :</label>
+                        <div id="radioAnglais">
+                            <input type="radio" id="anglais_oui" name="anglais" value="oui" {% if prestation.langues_personnel.anglais%}checked{% endif %} class="input">
+                            <label for="anglais_oui">Oui</label><br>
+                            <input type="radio" id="anglais_non" name="anglais" value="non" {% if not prestation.langues_personnel.anglais %}checked{% endif %} class="input">
+                            <label for="anglais_non">Non</label>
+                        </div>
+                    </div>
+                    
+                    <div class="input_wrap">
+                        <label for="espagnol" id="labelEspagnol">Espagnol :</label>
+                        <div id="radioEspagnol">
+                            <input type="radio" id="espagnol_oui" name="espagnol" value="oui" {% if prestation.langues_personnel.espagnol%}checked{% endif %} class="input">
+                            <label for="espagnol_oui">Oui</label><br>
+                            <input type="radio" id="espagnol_non" name="espagnol" value="non" {% if prestation.langues_personnel.espagnol%}checked{% endif %} class="input">
+                            <label for="espagnol_non">Non</label>
+                        </div>
+                    </div>
+                    
+                    <div class="input_wrap">
+                        <label for="francais" id="labelFrancais">Français :</label>
+                        <div id="radioFrancais">
+                            <input type="radio" id="francais_oui" name="francais" value="oui" {% if prestation.langues_personnel.francais%}checked{% endif %} class="input">
+                            <label for="francais_oui">Oui</label><br>
+                            <input type="radio" id="francais_non" name="francais" value="non" {% if not prestation.langues_personnel.francais%}checked{% endif %} class="input">
+                            <label for="francais_non">Non</label>
+                        </div>
+                    </div>
+                    
+                    <div class="input_wrap">
+                        <label for="allemand" id="labelAllemand">Allemand :</label>
+                        <div id="radioAllemand">
+                            <input type="radio" id="allemand_oui" name="allemand" value="oui" {% if prestation.langues_personnel.allemand%}checked{% endif %} class="input">
+                            <label for="allemand_oui">Oui</label><br>
+                            <input type="radio" id="allemand_non" name="allemand" value="non" {% if not prestation.langues_personnel.allemand%}checked{% endif %} class="input">
+                            <label for="allemand_non">Non</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form_5 data_info" style="display: none;">
+                <h4>Etape 5 : Méthodes de paiement</h4>
+                <div class="form_container">
+                    <div class="input_wrap">
+                        <label for="carte_de_credit" id="labelCarteDeCredit">Carte de crédit (Visa, MasterCard) :</label>
+                        <div id="radioCarteDeCredit">
+                            <input type="radio" id="carte_de_credit_oui" name="carte_de_credit" value="oui" {% if prestation.methodes_paiement.carte_de_credit%}checked{% endif %} class="input">
+                            <label for="carte_de_credit_oui">Oui</label><br>
+                            <input type="radio" id="carte_de_credit_non" name="carte_de_credit" value="non" {% if not prestation.methodes_paiement.carte_de_credit%}checked{% endif %} class="input">
+                            <label for="carte_de_credit_non">Non</label>
+                        </div>
+                    </div>
+                    
+                    <div class="input_wrap">
+                        <label for="especes" id="labelEspeces">Espèces :</label>
+                        <div id="radioEspeces">
+                            <input type="radio" id="especes_oui" name="especes" value="oui" {% if prestation.methodes_paiement.especes%}checked{% endif %} class="input">
+                            <label for="especes_oui">Oui</label><br>
+                            <input type="radio" id="especes_non" name="especes" value="non" {% if not prestation.methodes_paiement.especes%}checked{% endif %} class="input">
+                            <label for="especes_non">Non</label>
+                        </div>
+                    </div>
+                    
+                    <div class="input_wrap">
+                        <label for="carte_de_debit" id="labelCarteDeDebit">Carte de débit :</label>
+                        <div id="radioCarteDeDebit">
+                            <input type="radio" id="carte_de_debit_oui" name="carte_de_debit" value="oui" {% if prestation.methodes_paiement.carte_de_debit%}checked{% endif %} class="input">
+                            <label for="carte_de_debit_oui">Oui</label><br>
+                            <input type="radio" id="carte_de_debit_non" name="carte_de_debit" value="non" {% if not prestation.methodes_paiement.carte_de_debit%}checked{% endif %} class="input">
+                            <label for="carte_de_debit_non">Non</label>
+                        </div>
+                    </div>
+                    
+                    <div class="input_wrap">
+                        <label for="mobile_money" id="labelMobileMoney">Mobile Money :</label>
+                        <div id="radioMobileMoney">
+                            <input type="radio" id="mobile_money_oui" name="mobile_money" value="oui" {% if prestation.methodes_paiement.mobile_money%}checked{% endif %} class="input">
+                            <label for="mobile_money_oui">Oui</label><br>
+                            <input type="radio" id="mobile_money_non" name="mobile_money" value="non" {% if not prestation.methodes_paiement.mobile_money%}checked{% endif %} class="input">
+                            <label for="mobile_money_non">Non</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="btns_wrap">
+                <div class="common_btns form_1_btns">
+                    <button type="button" class="btn_next">Suivant <span class="icon"><ion-icon name="arrow-forward-sharp"></ion-icon></span></button>
+                </div>
+                <div class="common_btns form_2_btns" style="display: none;">
+                    <button type="button" class="btn_back"><span class="icon"><ion-icon name="arrow-back-sharp"></ion-icon></span>Précédent</button>
+                    <button type="button" class="btn_next">Suivant <span class="icon"><ion-icon name="arrow-forward-sharp"></ion-icon></span></button>
+                </div>
+                <div class="common_btns form_3_btns" style="display: none;">
+                    <button type="button" class="btn_back"><span class="icon"><ion-icon name="arrow-back-sharp"></ion-icon></span>Précédent</button>
+                    <button type="button" class="btn_next">Suivant <span class="icon"><ion-icon name="arrow-forward-sharp"></ion-icon></span></button>
+                </div>
+                <div class="common_btns form_4_btns" style="display: none;">
+                    <button type="button" class="btn_back"><span class="icon"><ion-icon name="arrow-back-sharp"></ion-icon></span>Précédent</button>
+                    <button type="button" class="btn_next">Suivant <span class="icon"><ion-icon name="arrow-forward-sharp"></ion-icon></span></button>
+                </div>
+                <div class="common_btns form_5_btns" style="display: none;">
+                    <button type="button" class="btn_back"><span class="icon"><ion-icon name="arrow-back-sharp"></ion-icon></span>Précédent</button>
+                    <button type="submit" class="btn_done">Enregistrer</button>
+                </div>
+            {% endfor %}
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript" src="{% static 'js/js_formulairePrestationHotel.js' %}"></script>
+</div>
+{% endblock %}

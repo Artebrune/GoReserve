@@ -1,0 +1,318 @@
+{% extends 'frontend/base.html' %}
+
+{% block title %}GoReserve - Validation liste Gérant{% endblock %}
+
+{% block head %}
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+{% endblock %}
+
+{% block content %}
+{% load static %}
+<style>
+    .alert-error {
+        color: red;
+    }
+
+    .alert-success {
+        color: green;
+        text-align: center;
+    }
+    .alert{
+        text-align: center; 
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="{% static 'css/css_style_listeHotel.css' %}">
+
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% endif %}" role="alert">
+        {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+ 
+<div class="col-xl-11 col-xxl-9" style="margin-bottom: 50px; margin-top:20px; margin-left:10px;">
+    <!-- Tabs and search START -->
+ <div class="row g-4 justify-content-between align-items-center" style="margin-top: 0px;margin-bottom: 25px;">
+    <div class="col-lg-5">
+        <!-- Tabs -->
+        <ul class="nav nav-pills-shadow nav-responsive">
+            <li class="nav-item"> 
+                <a class="nav-link mb-0 me-sm-2 active" id="grid-tab" data-bs-toggle="tab" data-bs-target="#grid-tab-pane" type="button" role="tab" aria-controls="grid-tab-pane" aria-selected="true"><i class="bi bi-patch-check-fill me-2 text-danger"></i>En cours de validation</a> 
+            </li>
+            <li class="nav-item">
+               <a class="nav-link mb-0 me-sm-2"id="list-tab" data-bs-toggle="tab" data-bs-target="#list-tab-pane" type="button" role="tab" aria-controls="list-tab-pane" aria-selected="false"><i class="bi bi-patch-check-fill me-2 text-success"></i>Validé</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col-lg-6 col-xxl-5">
+        <div class="d-sm-flex gap-4 justify-content-between justify-content-lg-end">
+            <!-- Search -->
+            <div class="col-md-8">
+                <form class="rounded position-relative">
+                    <input class="form-control bg-transparent" type="search" placeholder="Search" aria-label="Search">
+                    <button class="bg-transparent p-2 position-absolute top-50 end-0 translate-middle-y border-0 text-primary-hover text-reset" type="submit">
+                        <i class="fas fa-search fs-6"></i>
+                    </button>
+                </form>
+            </div>
+            <!-- Tabs -->
+            <!--<div class="d-flex justify-content-end mt-2 mt-sm-0">
+                <ul class="nav nav-pills nav-pills-dark" id="room-pills-tab" role="tablist">
+                     Tab item 
+                    <li class="nav-item">
+                         <button class="nav-link rounded-start rounded-0 active" id="grid-tab" data-bs-toggle="tab" data-bs-target="#grid-tab-pane" type="button" role="tab" aria-controls="grid-tab-pane" aria-selected="true"><i class="bi fa-fw bi-grid-fill"></i></button>
+                    </li>
+                     Tab item 
+                    <li class="nav-item">
+                        <button class="nav-link rounded-end rounded-0" id="list-tab" data-bs-toggle="tab" data-bs-target="#list-tab-pane" type="button" role="tab" aria-controls="list-tab-pane" aria-selected="false"><i class="bi fa-fw bi-list-ul"></i></button>
+                    </li>
+                </ul>
+            </div> -->
+        </div>
+    </div>
+</div>
+<!-- Tabs and search END -->
+<div class="tab-content mt-5" id="myTabContent">
+    <!-- Content item START -->
+    <div class="tab-pane fade show active" id="grid-tab-pane">
+        <div class="container">
+            <div class="row g-4">
+                {% for gerant in gerants %}
+                            <!-- Card item START -->
+                        {% if not gerant.is_validated %}
+                            <div class="col-md-4 col-xl-4">
+                                <div class="card shadow p-2 pb-0 h-100">
+                                    <!-- Overlay item -->
+                                    <!--<div class="position-absolute top-0 start-0 z-index-1 m-4">
+                                        <div class="badge bg-danger text-white">30% Off</div>
+                                    </div> -->
+                
+                                    <!-- Slider START -->
+                                    <div class="tiny-slider arrow-round arrow-xs arrow-dark rounded-2 overflow-hidden">
+                                        <div class="tiny-slider-inner" data-autoplay="false" data-arrow="true" data-dots="false" data-items="1">
+                                            <!-- Image item -->
+                                            <div><img src="{% static 'assets/images/about/user.jpg' %}" alt="Card image" style="width: 400px; height: 270px;"></div> 
+                                        </div>
+                                    </div>
+                                    <!-- Slider END -->
+                
+                                    <!-- Card body START -->
+                                    <div class="card-body px-3 pb-0">
+                                        <!-- Rating and cart -->
+                
+                                        <!-- Title -->
+                                        <h5 class="card-title"><a href="#" >{{gerant.nom}} {{gerant.prenom}}</a></h5>
+
+                                        <ul class="list-group list-group-borderless small mb-0 mt-3 mb-3">
+                                            <li class="list-group-item d-flex text-danger p-0">
+                                                <i class="bi bi-patch-check-fill me-2"></i>En cours de validation
+                                            </li>
+                                        </ul>
+                                        <!-- List -->
+                                        <!-- <ul class="nav nav-divider mb-2 mb-sm-3">
+                                            <li class="nav-item">Air Conditioning</li>
+                                            <li class="nav-item">Wifi</li>
+                                            <li class="nav-item">Kitchen</li>
+                                            <li class="nav-item">Pool</li>
+                                        </ul> -->
+                                    </div>
+                                    <!-- Card body END -->
+                
+                                    <!-- Card footer START-->
+                                    <div class="card-footer pt-0">
+                                        <!-- Price and Button -->
+                                        <div class="mt-3 mt-sm-0">
+                                            <a href="#" class="btn btn-sm btn-primary mb-0 mt-1" data-bs-toggle="modal" data-bs-target="#detailModal{{ gerant.id }}">detail</a>
+                                            {% if not gerant.is_validated %}
+                                                <a href="{% url 'validation-accepter-gerant' gerant_id=gerant.id %}" class="btn btn-sm btn-success mb-0 mt-1">Accepter</a>
+                                                <a href="{% url 'validation-refuser-gerant' gerant_id=gerant.id %}" class="btn btn-sm btn-danger mb-0 mt-1">Refuser</a> 
+                                            {% endif %}
+                                        </div> 
+                                        <div class="modal fade" id="detailModal{{ gerant.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"  aria-labelledby="detailModalLabel{{ gerant.id }}" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="detailModalLabel{{ gerant.id }}">Détail du gérant</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p style="font-size : 19px;">Nom d'utilisateur : <span style="font-weight: bold;">{{ gerant.user.username }}</span></p>
+                                                        <p style="font-size : 19px;">E-mail : <span style="font-weight: bold;">{{ gerant.user.email }}</span></p>
+                                                        <p style="font-size : 19px;">Nom : <span style="font-weight: bold;">{{ gerant.nom }}</span></p>
+                                                        <p style="font-size : 19px;">Prenom : <span style="font-weight: bold;">{{ gerant.prenom }}</span></p>
+                                                        <p style="font-size : 19px;">Numéro de téléphone : <span style="font-weight: bold;">{{ gerant.coordonnees_tel }}</span></p>
+                                                        <p style="font-size : 19px;">Adresse : <span style="font-weight: bold;">{{ gerant.adresse }}</span></p>
+                                                        <p style="font-size : 19px;">Pays : <span style="font-weight: bold;">{{ gerant.pays }}</span></p>
+                                                        <p style="font-size : 19px;">Documents(s) : </p>
+                                                        {% load custom_filters %}
+                                                        
+                                                        <div class="container">
+                                                            <div class="row">
+                                                                {% for document in documentsGerant %}
+                                                                    {% if document.gerant_id == gerant.id %}
+                                                                        
+                                                                            {% if document.document|is_pdf %}
+                                                                                <div>
+                                                                                    <div class="card-body d-flex justify-content-center align-items-center">
+                                                                                        <a href="{% static 'media/' %}{{ document.document.name }}" target="_blank">Ouvrir le Document N{{ forloop.counter }}</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            {% else %}
+                                                                            <div class="col-md-6 mb-4">
+                                                                                <div class="card h-100">
+                                                                                    <div class="card-body d-flex justify-content-center align-items-center">
+                                                                                        <a href="{% static 'media/' %}{{ document.document.name }}" target="_blank">
+                                                                                            <img src="{% static 'media/' %}{{ document.document.name }}" alt="Card image" class="img-fluid" style="width: 400px; height : 120px;">
+                                                                                        </a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            {% endif %}
+                                                                        
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>     
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Card item END -->
+                        {% endif %}
+                {% endfor %}
+            </div> <!-- Row END -->
+        </div>
+    </div>
+</div>
+
+
+
+
+
+    <!-- Content item START -->
+    <div class="tab-pane fade" id="list-tab-pane">
+        <div class="container">
+            <div class="row g-4">
+                {% for gerant in gerants %}
+                            <!-- Card item START -->
+                        {% if gerant.is_validated %}
+                            <div class="col-md-6 col-xl-4">
+                                <div class="card shadow p-2 pb-0 h-100">
+                                    <!-- Overlay item -->
+                                    <!--<div class="position-absolute top-0 start-0 z-index-1 m-4">
+                                        <div class="badge bg-danger text-white">30% Off</div>
+                                    </div> -->
+                
+                                    <div class="tiny-slider arrow-round arrow-xs arrow-dark rounded-2 overflow-hidden">
+                                        <div class="tiny-slider-inner" data-autoplay="false" data-arrow="true" data-dots="false" data-items="1">
+                                            <!-- Image item -->
+                                            <div><img src="{% static 'assets/images/about/user.jpg' %}" alt="Card image" style="width: 400px; height: 270px;"></div> 
+                                        </div>
+                                    </div>
+                                    <!-- Slider END -->
+                
+                                    <!-- Card body START -->
+                                    <div class="card-body px-3 pb-0">
+                                        <!-- Rating and cart -->
+                
+                                        <!-- Title -->
+                                        <h5 class="card-title"><a href="#" >{{gerant.nom}} {{gerant.prenom}}</a></h5>
+
+                                        <ul class="list-group list-group-borderless small mb-0 mt-3 mb-3">
+                                            <li class="list-group-item d-flex text-success p-0">
+                                                <i class="bi bi-patch-check-fill me-2"></i>Validé
+                                            </li>
+                                        </ul>
+                                        <!-- List -->
+                                        <!-- <ul class="nav nav-divider mb-2 mb-sm-3">
+                                            <li class="nav-item">Air Conditioning</li>
+                                            <li class="nav-item">Wifi</li>
+                                            <li class="nav-item">Kitchen</li>
+                                            <li class="nav-item">Pool</li>
+                                        </ul> -->
+                                    </div>
+                                    <!-- Card body END -->
+                
+                                    <!-- Card footer START-->
+                                    <div class="card-footer pt-0">
+                                        <!-- Price and Button -->
+
+                                        <div class="mt-3 mt-sm-0">
+                                            {% if not gerant.is_validated %}
+                                                <a href="{% url 'validation-accepter-gerant' gerant_id=gerant.id %}" class="btn btn-sm btn-success mb-0 mt-1">Accepter</a>
+                                                <a href="{% url 'validation-refuser-gerant' gerant_id=gerant.id %}" class="btn btn-sm btn-danger mb-0 mt-1">Refuser</a> 
+                                            {% endif %}
+                                            <a href="#" style="margin-left: 190px;" class="btn btn-sm btn-primary mb-0 w-80 mt-1" data-bs-toggle="modal" data-bs-target="#deleteModal{{ gerant.id }}">detail</a> 
+                                        </div>     
+                                        <div class="modal fade" id="deleteModal{{ gerant.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"  aria-labelledby="deleteModalLabel{{ gerant.id }}" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="deleteModalLabel{{ gerant.id }}">Détail du gérant</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p style="font-size : 19px;">Nom d'utilisateur : <span style="font-weight: bold;">{{ gerant.user.username }}</span></p>
+                                                        <p style="font-size : 19px;">E-mail : <span style="font-weight: bold;">{{ gerant.user.email }}</span></p>
+                                                        <p style="font-size : 19px;">Nom : <span style="font-weight: bold;">{{ gerant.nom }}</span></p>
+                                                        <p style="font-size : 19px;">Prenom : <span style="font-weight: bold;">{{ gerant.prenom }}</span></p>
+                                                        <p style="font-size : 19px;">Numéro de téléphone : <span style="font-weight: bold;">{{ gerant.coordonnees_tel }}</span></p>
+                                                        <p style="font-size : 19px;">Adresse : <span style="font-weight: bold;">{{ gerant.adresse }}</span></p>
+                                                        <p style="font-size : 19px;">Pays : <span style="font-weight: bold;">{{ gerant.pays }}</span></p>
+                                                        <p style="font-size : 19px;">Documents(s) : </p>
+                                                        {% load custom_filters %}
+                                                        
+                                                        <div class="container">
+                                                            <div class="row">
+                                                                {% for document in documentsGerant %}
+                                                                    {% if document.gerant_id == gerant.id %}
+                                                                        
+                                                                            {% if document.document|is_pdf %}
+                                                                                <div>
+                                                                                    <div class="card-body d-flex justify-content-center align-items-center">
+                                                                                        <a href="{% static 'media/' %}{{ document.document.name }}" target="_blank">Ouvrir le Document N{{ forloop.counter }}</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            {% else %}
+                                                                            <div class="col-md-6 mb-4">
+                                                                                <div class="card h-100">
+                                                                                    <div class="card-body d-flex justify-content-center align-items-center">
+                                                                                        <a href="{% static 'media/' %}{{ document.document.name }}" target="_blank">
+                                                                                            <img src="{% static 'media/' %}{{ document.document.name }}" alt="Card image" class="img-fluid" style="width: 400px; height : 120px;">
+                                                                                        </a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            {% endif %}
+                                                                        
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>       
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Card item END -->
+                        {% endif %}
+                {% endfor %}
+            </div> <!-- Row END -->
+    </div>
+    <!-- Content item END -->
+
+
+{% endblock %}

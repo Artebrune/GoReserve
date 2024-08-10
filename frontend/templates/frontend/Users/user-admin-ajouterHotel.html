@@ -1,0 +1,219 @@
+{% extends 'frontend/Users/user-base-admin.html' %}
+
+{% block title %}GoReserve - Ajouter hôtel{% endblock %}
+
+{% block head %}
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+{% endblock %}
+
+
+
+
+
+{% block content %}
+<style>
+    .modal-step {
+        display: none;
+    }
+    .modal-step.active {
+        display: block;
+    }
+</style>
+{%load static%}
+<button id="guideButton" class="btn btn-primary">Guide de Création</button>
+<div class="page-content-wrapper p-xxl-4">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/css_formulaireAjouterHotel.css' %}">
+<div class="wrapper card shadow">
+    <div>
+        <h3>Hôtel</h3>
+    </div>
+    <div class="header">
+        <ul>
+            <li class="active form_1_progessbar">
+                <div>
+                    <p>1</p>
+                </div>
+            </li>
+            <li class="form_2_progessbar">
+                <div>
+                    <p>2</p>
+                </div>
+            </li>
+            <li class="form_3_progessbar">
+                <div>
+                    <p>3</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="form_wrap">
+        <form method="post" enctype="multipart/form-data" action="user-admin-ajouterHotel">
+			{% csrf_token %}
+            <div class="form_1 data_info">
+                <h4>Etape 1</h4>
+                <div class="form_container">
+                    <div class="input_wrap">
+                        <label for="nom" class="form-label">Nom</label>
+                        <input type="text" name="nom" class="form-control" id="nom" placeholder="nom de l'hôtel" required>
+                    </div>
+                    <div class="input_wrap">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea name="description" id="description" class="form-control" cols="63" rows="4" placeholder="description de l'hôtel" required></textarea>
+                    </div>
+                    <div class="input_wrap">
+                        <label for="statut" class="form-label" >Statut (étoiles)</label>
+                        <select name="statut" class="form-select js-choice" data-search-enabled="true" id="statut" required>
+                            <option value="0" selected>Aucune étoile</option>
+                            <option value="1">⭐ 1 étoile</option>
+                            <option value="2">⭐⭐ 2 étoiles</option>
+                            <option value="3">⭐⭐⭐ 3 étoiles</option>
+                            <option value="4">⭐⭐⭐⭐ 4 étoiles</option>
+                            <option value="5">⭐⭐⭐⭐⭐ 5 étoiles</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form_2 data_info" style="display: none;">
+                <h4>Etape 2</h4>
+                <div class="form_container">
+                    <div class="input_wrap">
+                        <label for="adresse" class="form-label">Adresse</label>
+                        <input type="text" name="adresse" class="form-control" id="adresse" placeholder="localisation de l'hôtel" required>
+                    </div>
+                    <div class="input_wrap">
+                        <label for="ville" class="form-label">Ville</label>
+                        <input type="text" name="ville" class="form-control" id="ville" placeholder="ville dans laquelle se trouve de l'hôtel" required>
+                    </div>
+                    <div class="input_wrap">
+                        <label for="pays" class="form-label">Pays</label>
+                        <select name="pays" class="form-select js-choice" data-search-enabled="true" id="pays" required>
+                            <option value="" selected>Sélectionner un pays</option>
+                            {% for country in pays %}
+                                <option value="{{ country }}">{{ country }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="input_wrap" class="form-label">
+                        <label for="coordonnees_tel">Coordonnées Téléphoniques</label>
+                        <input type="text" name="coordonnees_tel" class="form-control" id="coordonnees_tel" placeholder="coordonnées téléphoniques de l'hôtel" required>
+                    </div>
+                </div>
+            </div>
+            <div class="form_3 data_info" style="display: none;">
+                <h4>Etape 3</h4>
+                <div class="form_container">
+                    <div class="input_wrap">
+                        <label for="images" class="form-label">Image(s)</label>
+                        <input type="file" accept="image/*" name="images" class="form-control" id="images" multiple required>
+                    </div>
+                    <div class="input_wrap">
+                        <label for="nombre_de_chambres" class="form-label">Nombre de chambres</label>
+                        <input type="text" name="nombre_de_chambres" class="form-control" id="nombre_de_chambres" placeholder="nombre total de chambres" required>
+                    </div>
+                </div>
+            </div>
+            <div class="btns_wrap">
+                <div class="common_btns form_1_btns">
+                    <button type="button" class="btn_next">Suivant <span class="icon"><ion-icon name="arrow-forward-sharp"></ion-icon></span></button>
+                </div>
+                <div class="common_btns form_2_btns" style="display: none;">
+                    <button type="button" class="btn_back"><span class="icon"><ion-icon name="arrow-back-sharp"></ion-icon></span>Précédent</button>
+                    <button type="button" class="btn_next">Suivant <span class="icon"><ion-icon name="arrow-forward-sharp"></ion-icon></span></button>
+                </div>
+                <div class="common_btns form_3_btns" style="display: none;">
+                    <button type="button" class="btn_back"><span class="icon"><ion-icon name="arrow-back-sharp"></ion-icon></span>Précédent</button>
+                    <button type="submit" class="btn_done">Enregistrer</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="welcomeModal" tabindex="-1" aria-labelledby="welcomeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="welcomeModalLabel">Guide de Création d'Hôtel</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Étape 1 -->
+                <div class="modal-step active" id="step1">
+                    <h5>Étape 1 : Remplir le formulaire</h5>
+                    <p>Assurez-vous de fournir des informations complètes et précises sur votre hôtel, y compris le nom, la description, le statut ...., et les informations supplemtaires.</p>
+                    <strong style="margin-bottom : 10px;">Notez bien :</strong>
+                    <p>Dans le formulaire, un champ est dedié pour que vous puissiez y téléverser des photos de haute qualité de votre hôtel, y compris les chambres, les installations, et les espaces communs.</p>
+                    <button class="btn btn-primary next-btn">Suivant</button>
+                </div>
+                <!-- Étape 2 -->
+                
+                <div class="modal-step" id="step2">
+                    <h5>Validation</h5>
+                    <p>Pour que votre hôtel soit validé et opérationnel sur notre plateforme, les conditions suivantes doivent être remplies :</p>
+                    <ul>
+                        <li style="list-style: circle;"> Les informations doivent être complètes et exactes.</li>
+                        <li style="list-style: circle;">Les photos doivent être claires et représentatives de l'hôtel.</li>
+                        <li style="list-style: circle;">Vous devez ajouter au moins une chambre et des prestations apres la création de l'hôtel. Des formulaires spécifiques seront fournies aussi pour ces ajouts</li>
+                    </ul>
+                    <p>Une fois que toutes ces conditions sont remplies, votre hôtel sera vérifié et approuvé par notre équipe, et il sera opérationnel sur notre plateforme.</p>
+                    <button class="btn btn-secondary prev-btn">Précédent</button>
+                    <button class="btn btn-primary" data-bs-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="{% static 'js/js_formulaireAjouterHotel.js' %}"></script>
+<!-- Script pour gérer les étapes -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal'));
+        var steps = document.querySelectorAll('.modal-step');
+        var currentStep = 0;
+
+        function showStep(stepIndex) {
+            steps.forEach(function(step, index) {
+                step.classList.remove('active');
+                if (index === stepIndex) {
+                    step.classList.add('active');
+                }
+            });
+        }
+
+        // Afficher le modal lorsque la page est chargée
+        welcomeModal.show();
+
+        // Réinitialiser l'étape actuelle à 0 et afficher la première étape à l'ouverture du modal
+        document.getElementById('guideButton').addEventListener('click', function() {
+            currentStep = 0;
+            showStep(currentStep);
+            welcomeModal.show();
+        });
+
+        // Gestion des boutons "Suivant" et "Précédent"
+        document.querySelectorAll('.next-btn').forEach(function(button) {
+            button.addEventListener('click', function() {
+                if (currentStep < steps.length - 1) {
+                    currentStep++;
+                    showStep(currentStep);
+                }
+            });
+        });
+
+        document.querySelectorAll('.prev-btn').forEach(function(button) {
+            button.addEventListener('click', function() {
+                if (currentStep > 0) {
+                    currentStep--;
+                    showStep(currentStep);
+                }
+            });
+        });
+
+        // Initialiser l'affichage de la première étape
+        showStep(currentStep);
+    });
+    </script>   
+</div>
+
+{% endblock %}

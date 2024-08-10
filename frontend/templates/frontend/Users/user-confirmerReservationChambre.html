@@ -1,0 +1,120 @@
+{% extends 'frontend/Users/user-base.html' %}
+
+{% block title %}GoReserve - reserver Chambre{% endblock %}
+
+{% block head %}
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+{% endblock %}
+
+{% block content %}
+{% load static %}
+<style>
+    .alert{
+        text-align: center;
+		width : 75%; 
+		margin-left: 145px;
+		font-size: 18px;
+    }
+</style>
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% endif %}" role="alert">
+        {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+<!-- =======================
+Main content START -->
+<section class="pt-4">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-10 col-xl-10 mx-auto">
+
+				<div class="card shadow">
+					<!-- Image -->
+					<img src="assets/images/gallery/04.jpg" class="rounded-top" alt="">
+
+					<!-- Card body -->
+					<div class="card-body text-center p-4">
+						<!-- Title -->
+						<h1 class="card-title fs-3">🎊 Toutes nos félicitations! 🎊</h1>
+						<p class="lead mb-3"></p>
+
+						<!-- Second title -->
+						<h5 class="text-primary mb-4">{{ reservation.chambre_id.nom }}</h5>
+
+						<!-- List -->
+						<div class="row justify-content-between text-start mb-4">
+							<div class="col-lg-5">
+								<ul class="list-group list-group-borderless">
+									<li class="list-group-item d-sm-flex justify-content-between align-items-center">
+										<span class="mb-0"><i class="bi bi-vr fa-fw me-2"></i>Réservation ID:</span>
+										<span class="h6 fw-normal mb-0">{{ reservation.numero_confirmation }}</span>
+									</li>
+									<li class="list-group-item d-sm-flex justify-content-between align-items-center">
+										<span class="mb-0"><i class="bi bi-person fa-fw me-2"></i>Réservé par:</span>
+										<span class="h6 fw-normal mb-0">{{ reservation.user.username }}</span>
+									</li>
+									<li class="list-group-item d-sm-flex justify-content-between align-items-center">
+										<span class="mb-0"><i class="bi bi-wallet2 fa-fw me-2"></i>Methode de paiement:</span>
+										<span class="h6 fw-normal mb-0">{{ reservation.moyen_paiement }}</span>
+									</li>
+									<li class="list-group-item d-sm-flex justify-content-between align-items-center">
+										<span class="mb-0"><i class="bi bi-currency-dollar fa-fw me-2"></i>Prix Total :</span>
+										<span class="h6 fw-normal mb-0">{{ reservation.prix_total }} F CFA</span>
+									</li>
+								</ul>
+							</div>
+
+							<div class="col-lg-5">
+								<ul class="list-group list-group-borderless">
+									<li class="list-group-item d-sm-flex justify-content-between align-items-center">
+										<span class="mb-0"><i class="bi bi-calendar fa-fw me-2"></i>Date de réservation:</span>
+										<span class="h6 fw-normal mb-0">{{ reservation.date_reservation|date:"d/m/Y" }}</span>
+									</li>
+                                    <li class="list-group-item d-sm-flex justify-content-between align-items-center">
+                                        <span class="mb-0"><i class="bi bi-calendar fa-fw me-2"></i>Date d'arrivée:</span>
+                                        <span class="h6 fw-normal mb-0">{{ reservation.date_arrivee|date:"d/m/Y" }}</span>
+                                    </li>
+									<li class="list-group-item d-sm-flex justify-content-between align-items-center">
+										<span class="mb-0"><i class="bi bi-people fa-fw me-2"></i>Nombre de personnes :</span>
+										<span class="h6 fw-normal mb-0">{{ reservation.nombre_personnes }}</span>
+									</li>
+									{% if reservation.is_confirmer %}
+										<li class="list-group-item d-sm-flex justify-content-between align-items-center">
+											<span class="mb-0"><i class="bi bi-calendar fa-fw me-2"></i>Statut :</span>
+											<span class="h6 fw-normal text-bg-warning mt-2">En cours de validation</span>
+										</li>
+									{% endif %}
+								</ul>
+							</div>
+						</div>
+
+						{% if not reservation.is_confirmer %}
+						<!-- Button -->
+						<div class="d-sm-flex justify-content-sm-end d-grid">
+							<!-- Share button with dropdown -->
+							
+							<div class="dropdown me-sm-2 mb-2 mb-sm-0">
+								<a href="{% url 'user-annulerReservationChambre' reservation.id %}" class="btn btn-light mb-0 w-100" >
+									Annuler
+								</a>
+								<!-- dropdown button -->
+								
+							</div>
+							<!-- Download button -->
+							<a href="{% url  'user-confirmerReservationChambre' reservation.id %}" class="btn btn-primary mb-0">Confirmer</a>
+						</div>
+						{% endif %}
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</section>
+<!-- =======================
+Main content START -->
+
+
+{% endblock %}

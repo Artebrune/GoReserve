@@ -1,0 +1,109 @@
+{% extends 'frontend/Users/user-base-admin.html' %}
+
+{% block title %}
+  GoReserve - Ajouter menu
+{% endblock %}
+
+{% block head %}
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+{% endblock %}
+
+{% block content %}
+  {% load static %}
+  <div class="page-content-wrapper p-xxl-4">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/css_formulaireAjouterChambre.css' %}" />
+    <div class="wrapper card shadow">
+      <div>
+        <h3>Ajouter Menu</h3>
+      </div>
+      <div class="header">
+        <ul>
+          <li class="active form_1_progessbar">
+            <div>
+              <p>1</p>
+            </div>
+          </li>
+          <li class="form_2_progessbar">
+            <div>
+              <p>2</p>
+            </div>
+          </li>
+          <li class="form_3_progessbar">
+            <div>
+              <p>3</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="form_wrap">
+        <form method="post" enctype="multipart/form-data" action="user-admin-ajouterMenu">
+            {% csrf_token %}
+            <div class="form_1 data_info">
+                <h4>Étape 1</h4>
+                <div class="form_container">
+                    <div class="input_wrap">
+                        <label for="nom">Nom du menu</label>
+                        <input type="text" name="nom" class="form-control" id="nom" placeholder="Nom du menu" required>
+                    </div>
+                    <div class="input_wrap">
+                        <label for="description">Description</label>
+                        <textarea name="description" class="form-control" id="description" cols="63" rows="4" placeholder="Description du menu" required></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="form_2 data_info" style="display: none;">
+                <h4>Étape 2</h4>
+                <div class="form_container">
+                    <div class="input_wrap">
+                        <label for="type_de_plat">Type de plat</label>
+                        <select name="type_de_plat" class="form-select js-choice" data-search-enabled="true" id="type_de_plat" required>
+                            <option value="" selected>Sélectionner le type de plat</option>
+                            <option value="entrée">Entrée</option>
+                            <option value="plat principal">Plat Principal</option>
+                            <option value="dessert">Dessert</option>
+                            <option value="boisson">Boisson</option>
+                        </select>
+                    </div>
+                    <div class="input_wrap">
+                        <label for="prix">Prix</label>
+                        <input type="text" name="prix" class="form-control" id="prix" placeholder="Prix du menu" required>
+                    </div>
+                </div>
+            </div>
+            <div class="form_3 data_info" style="display: none;">
+                <h4>Étape 3</h4>
+                <div class="form_container">
+                    <div class="input_wrap">
+                        <label for="restaurant">Restaurant :</label>
+                        <select id="restaurant" name="restaurant" required class="form-select js-choice" data-search-enabled="true" required>
+                            {% for restaurant in restaurants %}
+                                <option value="{{ restaurant.id }}">{{ restaurant.nom }}</option>
+                            {% endfor %}
+                        </select><br><br>
+                    </div>
+                    <div class="input_wrap">
+                        <label for="images">Image(s) du plat</label>
+                        <input type="file" accept="image/*" name="images" class="form-control" id="images" multiple required>
+                    </div>
+                </div>
+            </div>
+            <div class="btns_wrap">
+                <div class="common_btns form_1_btns">
+                    <button type="button" class="btn_next">Suivant <span class="icon"><ion-icon name="arrow-forward-sharp"></ion-icon></span></button>
+                </div>
+                <div class="common_btns form_2_btns" style="display: none;">
+                    <button type="button" class="btn_back"><span class="icon"><ion-icon name="arrow-back-sharp"></ion-icon></span>Précédent</button>
+                    <button type="button" class="btn_next">Suivant <span class="icon"><ion-icon name="arrow-forward-sharp"></ion-icon></span></button>
+                </div>
+                <div class="common_btns form_3_btns" style="display: none;">
+                    <button type="button" class="btn_back"><span class="icon"><ion-icon name="arrow-back-sharp"></ion-icon></span>Précédent</button>
+                    <button type="submit" class="btn_done">Enregistrer</button>
+                </div>
+            </div>
+        </form>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="{% static 'js/js_formulaireAjouterChambre.js' %}"></script>
+  </div>
+{% endblock %}

@@ -1,0 +1,284 @@
+{% extends 'frontend/Users/user-base-admin.html' %}
+
+{% block title %}GoReserve - liste chambres{% endblock %}
+
+{% block head %}
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+{% endblock %}
+
+
+{% block content %}
+{%load static%}
+<link rel="stylesheet" type="text/css" href="{% static 'css/css_style_listeChambre.css' %}">
+{% if messages %}
+    <div class="alert alert-success" role="alert" style="width:95%; margin-left:25px;text-align:center;font-size:18px;">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+{% endif %}
+<div class="page-content-wrapper p-xxl-4">
+
+    <!-- Title -->
+			<div class="row">
+				<div class="col-12 mb-5">
+					<div class="d-sm-flex justify-content-between align-items-center">
+						<h1 class="h3 mb-2 mb-sm-0">Chambres</h1>
+						<div class="d-grid"><a href="{% url 'user-admin-ajouterChambre' %}" class="btn btn-primary-soft mb-0"><i class="bi bi-plus-lg fa-fw"></i> Ajouter une nouvelle Chambre</a></div>					
+					</div>
+				</div>
+			</div>
+
+    <!-- Counter START -->
+{% if chambres %} 
+			<div class="row g-4 mb-5">
+				<!-- Counter item -->
+				<div class="col-md-6 col-xxl-3">
+					<div class="card card-body shadow p-4">
+						<div class="d-flex justify-content-between align-items-center mb-3">
+							<!-- Number -->
+							<div class="me-2">
+								<span>New Booked Rooms</span>
+								<h3 class="mb-0 mt-2">54</h3>
+							</div>
+							<!-- Icon -->
+							<div class="icon-lg rounded-circle flex-shrink-0 bg-primary bg-opacity-10 text-primary mb-0">
+								<i class="bi bi-door-open fa-fw"></i>
+							</div>
+						</div>
+						<!-- Progress bar -->
+						<div class="progress progress-xs bg-primary bg-opacity-10 mb-2">
+							<div class="progress-bar bg-primary" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+							</div>
+						</div>
+						<span><span class="text-primary">16 new rooms booked</span> today</span>
+					</div>	
+				</div>
+
+				<!-- Counter item -->
+				<div class="col-md-6 col-xxl-3">
+					<div class="card card-body shadow p-4">
+						<div class="d-flex justify-content-between align-items-center mb-3">
+							<!-- Number -->
+							<div class="me-2">
+								<span>Cancelled Rooms</span>
+								<h3 class="mb-0 mt-2">12</h3>
+							</div>
+							<!-- Icon -->
+							<div class="icon-lg rounded-circle flex-shrink-0 bg-danger bg-opacity-10 text-danger mb-0">
+								<i class="bi bi-x-circle fa-fw"></i>
+							</div>
+						</div>
+						<!-- Progress bar -->
+						<div class="progress progress-xs bg-danger bg-opacity-10 mb-2">
+							<div class="progress-bar bg-danger" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+							</div>
+						</div>
+						<span><span class="text-danger">2 canceled rooms</span> today</span>
+					</div>	
+				</div>
+
+				<!-- Counter item -->
+				<div class="col-md-6 col-xxl-3">
+					<div class="card card-body shadow p-4">
+						<div class="d-flex justify-content-between align-items-center mb-3">
+							<!-- Number -->
+							<div class="me-2">
+								<span>Check-in</span>
+								<h3 class="mb-0 mt-2">20</h3>
+							</div>
+							<!-- Icon -->
+							<div class="icon-lg rounded-circle flex-shrink-0 bg-success bg-opacity-10 text-success mb-0">
+								<i class="bi bi-box-arrow-in-right fa-fw"></i>
+							</div>
+						</div>
+						<!-- Progress bar -->
+						<div class="progress progress-xs bg-success bg-opacity-10 mb-2">
+							<div class="progress-bar bg-success" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+							</div>
+						</div>
+						<span><span class="text-success">45 reservation</span> incoming</span>
+					</div>	
+				</div>
+
+				<!-- Counter item -->
+				<div class="col-md-6 col-xxl-3">
+					<div class="card card-body shadow p-4">
+						<div class="d-flex justify-content-between align-items-center mb-3">
+							<!-- Number -->
+							<div class="me-2">
+								<span>Check-out</span>
+								<h3 class="mb-0 mt-2">28</h3>
+							</div>
+							<!-- Icon -->
+							<div class="icon-lg rounded-circle flex-shrink-0 bg-orange bg-opacity-10 text-orange mb-0">
+								<i class="bi bi-box-arrow-right fa-fw"></i>
+							</div>
+						</div>
+						<!-- Progress bar -->
+						<div class="progress progress-xs bg-orange bg-opacity-10 mb-2">
+							<div class="progress-bar bg-orange" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+							</div>
+						</div>
+						<span><span class="text-orange">30 reservation</span> outgoing</span>
+					</div>	
+				</div>
+			</div>
+			<!-- Counter END -->
+            
+    <!-- Tabs and search START -->
+			<div class="row g-4 justify-content-between align-items-center" style="margin-top: 0px;margin-bottom: 25px;">
+				<div class="col-lg-5">
+					<!-- Tabs -->
+					<ul class="nav nav-pills-shadow nav-responsive">
+						<li class="nav-item"> 
+							<a class="nav-link mb-0 me-sm-2 active" data-bs-toggle="tab" href="#tab-1">All Status</a> 
+						</li>
+						<li class="nav-item">
+							<a class="nav-link mb-0 me-sm-2" data-bs-toggle="tab" href="#tab-2">Available</a>
+						</li>
+						<li class="nav-item"> 
+							<a class="nav-link mb-0" data-bs-toggle="tab" href="#tab-3">Sold Out</a> 
+						</li>
+					</ul>
+				</div>
+
+				<div class="col-lg-6 col-xxl-5">
+					<div class="d-sm-flex gap-4 justify-content-between justify-content-lg-end">
+						<!-- Search -->
+						<div class="col-md-8">
+							<form class="rounded position-relative">
+								<input class="form-control bg-transparent" type="search" placeholder="Search" aria-label="Search">
+								<button class="bg-transparent p-2 position-absolute top-50 end-0 translate-middle-y border-0 text-primary-hover text-reset" type="submit">
+									<i class="fas fa-search fs-6"></i>
+								</button>
+							</form>
+						</div>
+						<!-- Tabs -->
+						<div class="d-flex justify-content-end mt-2 mt-sm-0">
+							<ul class="nav nav-pills nav-pills-dark" id="room-pills-tab" role="tablist">
+								<!-- Tab item -->
+								<li class="nav-item">
+									 <button class="nav-link rounded-start rounded-0 active" id="grid-tab" data-bs-toggle="tab" data-bs-target="#grid-tab-pane" type="button" role="tab" aria-controls="grid-tab-pane" aria-selected="true"><i class="bi fa-fw bi-grid-fill"></i></button>
+								</li>
+								<!-- Tab item -->
+								<li class="nav-item">
+									<button class="nav-link rounded-end rounded-0" id="list-tab" data-bs-toggle="tab" data-bs-target="#list-tab-pane" type="button" role="tab" aria-controls="list-tab-pane" aria-selected="false"><i class="bi fa-fw bi-list-ul"></i></button>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Tabs and search END -->
+<div class="tab-content mt-3 m-lg-2" id="myTabContent">
+    <!-- Content item START -->
+    <div class="tab-pane fade show active" id="grid-tab-pane">
+        <!-- Rooms START -->
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xxl-5 g-4">
+            {% for chambre in chambres %}
+            <!-- Room item -->
+            <div class="col">
+                <div class="card shadow h-100">
+                    <!-- Overlay item -->
+                    <div class="position-relative">
+                        <!-- Image -->
+                        <img src="static/media/{{chambre.photo}}" class="card-img-top" alt="Card image">
+                        <!-- Overlay -->
+                        <div class="card-img-overlay d-flex flex-column p-3">
+                            <!-- Card overlay top -->
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="badge me-2"><div></div></div>
+                                <!-- Buttons -->
+                                <div class="list-inline-item dropdown">
+                                    <!-- Dropdown button -->
+                                    <a href="#" class="btn btn-sm btn-round btn-light" role="button" id="dropdownAction1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </a>
+                                    <!-- dropdown items -->
+                                    <ul class="dropdown-menu dropdown-menu-end min-w-auto shadow rounded small" aria-labelledby="dropdownAction{{ chambre.id }}">
+                                        <li><a class="dropdown-item edit" href="{% url "user-admin-modifierChambre" chambre_id=chambre.id %}"><i class="bi bi-pencil-square fa-fw me-2"></i>Modifier</a></li>
+                                        <a class="dropdown-item delete" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ chambre.id }}"><i class="bi bi-slash-circle me-2"></i>Supprimer</a>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="deleteModal{{ chambre.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"  aria-labelledby="deleteModalLabel{{ chambre.id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="deleteModalLabel{{ chambre.id }}">Suppression : {{chambre.nom}}</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p style="font-size : 19px;">cette action sera irréversible et entrainera la supression de tous les données liée a cette chambre. Êtes-vous sûr de vouloir supprimer cette chambre ?</p>
+                                </div>
+                                <div class="modal-footer">
+                                <button type="button" class="btn btn-success-confirm"><a href="{% url "user-admin-supprimerChambre" chambre_id=chambre.id %}">Confirmer</a></button>
+                                <button type="button" class="btn btn-danger-cancel" data-bs-dismiss="modal">Annuler</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card body START -->
+                    <div class="card-body px-3">
+                        <!-- Title -->
+                        <h5 class="card-title mb-1"><a href="admin-booking-detail.html">{{chambre.nom}}</a></h5>
+                        <ul class="list-group list-group-borderless small mt-2 mb-0">
+                            <li class="list-group-item pb-0">
+                                <i class="fa-solid fa-building fa-fw me-2"></i>{{chambre.emplacement}} e étage
+                            </li>
+                            <li class="list-group-item pb-0">
+                                <i class="fa-solid fa-bed fa-fw me-2"></i>{{chambre.type_de_chambre}}
+                            </li>
+                            <li class="list-group-item pb-0">
+                                <i class="bi bi-building fa-fw me-2"></i>{{chambre.hotel.nom}}
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Card body END -->
+
+                    <!-- Card footer START-->
+                    <div class="card-footer pt-0">
+                        <!-- Price -->
+                        <div class="hstack gap-2 mb-2">
+                            <h6 class="fw-normal mb-0">{{chambre.tarif_par_nuit}} F CFA</h6>
+                            <small>/ nuit</small>
+                        </div>
+                        <a href="{% url "user-admin-detailChambre" chambre.id %}" class="btn btn-sm btn-primary-soft mb-0 w-100">Voir detail</a>
+                    </div>
+                </div>
+            </div>
+{% endfor %}
+</div>
+</div>
+</div>
+<!-- Pagination START -->
+<div class="d-sm-flex justify-content-sm-between align-items-sm-center mt-4">
+    <!-- Content -->
+    <p class="mb-sm-0 text-center text-sm-start">Showing 1 to 8 of 20 entries</p>
+    <!-- Pagination -->
+    <nav class="mb-sm-0 d-flex justify-content-center" aria-label="navigation">
+        <ul class="pagination pagination-sm pagination-primary-soft mb-0">
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">Prev</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item active"><a class="page-link" href="#">2</a></li>
+            <li class="page-item disabled"><a class="page-link" href="#">..</a></li>
+            <li class="page-item"><a class="page-link" href="#">15</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+{% else %}
+    <p style="margin-top: 170px; text-align : center; font-size : 30px;">Aucune Chambre disponible</p>
+{% endif %}
+<!-- Pagination END -->
+</div>
+</div>
+{% endblock %}

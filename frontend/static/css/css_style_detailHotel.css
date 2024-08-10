@@ -1,0 +1,67 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    outline: none;
+    font-family: 'Open Sans', sans-serif;
+}
+
+body {
+    background: var(--primary);
+    color: var(--text-clr);
+    font-size: 16px;
+    position: relative;
+}
+
+.btn-red-soft {
+    color: #d6293e;
+    background-color: rgba(214, 41, 62, 0.1);
+    margin-left: 109px;
+  }
+  .btn-red-soft:active, .btn-red-soft:hover, .btn-red-soft:focus {
+    color: #fff;
+    background-color: #d65d6b;
+    border-color: #d65d6b;
+  }
+
+  .btn-primary-soft {
+    color: #ffffff;
+    background-color: #9f97e5;
+    margin-left: 25px;
+  }
+  .btn-primary-soft:active, .btn-primary-soft:hover, .btn-primary-soft:focus {
+    color: #fff;
+    background-color: #5143d9;
+    border-color: #5143d9;
+  }
+
+  .btn-danger-cancel {
+    color: #d6293e;
+    background-color: rgba(214, 41, 62, 0.1);
+  }
+  .btn-danger-cancel:active, .btn-danger-cancel:hover, .btn-danger-cancel:focus {
+    color: #fff;
+    background-color: #d65d6b;
+    border-color: #d65d6b;
+  }
+
+  .btn-success-confirm {
+    color: #0cbc87;
+    background-color: rgba(12, 188, 135, 0.1);
+  }
+  .btn.btn-success-confirm a{
+    color : #0cbc87;
+  }
+
+  .btn-success-confirm:active, .btn-success-confirm:hover, .btn-success-confirm:focus {
+    background-color: #0cbc87;
+    border-color: #0cbc87;
+  }
+
+  .btn-success-confirm:active a, .btn-success-confirm:hover a, .btn-success-confirm:focus a {
+    color: #fff;
+  }
+
+  
+  

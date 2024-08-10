@@ -1,0 +1,148 @@
+{% extends 'frontend/base.html' %}
+
+{% block title %}GoReserve - liste Menus{% endblock %}
+
+{% block head %}
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+{% endblock %}
+
+
+{% block content %}
+{%load static%}
+<link rel="stylesheet" type="text/css" href="{% static 'css/css_style_listeChambre.css' %}">
+{% if messages %}
+    <div class="alert alert-success" role="alert" style="width:95%; margin-left:25px;text-align:center;font-size:18px;">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+{% endif %}
+<div class="page-content-wrapper p-xxl-4">
+            
+    <!-- Tabs and search START -->
+			<div class="row g-4 justify-content-between align-items-center" style="margin-top: 0px;margin-bottom: 25px;">
+				<div class="col-lg-5">
+					<!-- Tabs -->
+					<ul class="nav nav-pills-shadow nav-responsive">
+						<li class="nav-item"> 
+							<a class="nav-link mb-0 me-sm-2 active" data-bs-toggle="tab" href="#tab-1">All Status</a> 
+						</li>
+						<li class="nav-item">
+							<a class="nav-link mb-0 me-sm-2" data-bs-toggle="tab" href="#tab-2">Available</a>
+						</li>
+						<li class="nav-item"> 
+							<a class="nav-link mb-0" data-bs-toggle="tab" href="#tab-3">Sold Out</a> 
+						</li>
+					</ul>
+				</div>
+
+				<div class="col-lg-6 col-xxl-5">
+					<div class="d-sm-flex gap-4 justify-content-between justify-content-lg-end">
+						<!-- Search -->
+						<div class="col-md-8">
+							<form class="rounded position-relative">
+								<input class="form-control bg-transparent" type="search" placeholder="Search" aria-label="Search">
+								<button class="bg-transparent p-2 position-absolute top-50 end-0 translate-middle-y border-0 text-primary-hover text-reset" type="submit">
+									<i class="fas fa-search fs-6"></i>
+								</button>
+							</form>
+						</div>
+						<!-- Tabs -->
+						<div class="d-flex justify-content-end mt-2 mt-sm-0">
+							<ul class="nav nav-pills nav-pills-dark" id="room-pills-tab" role="tablist">
+								<!-- Tab item -->
+								<li class="nav-item">
+									 <button class="nav-link rounded-start rounded-0 active" id="grid-tab" data-bs-toggle="tab" data-bs-target="#grid-tab-pane" type="button" role="tab" aria-controls="grid-tab-pane" aria-selected="true"><i class="bi fa-fw bi-grid-fill"></i></button>
+								</li>
+								<!-- Tab item -->
+								<li class="nav-item">
+									<button class="nav-link rounded-end rounded-0" id="list-tab" data-bs-toggle="tab" data-bs-target="#list-tab-pane" type="button" role="tab" aria-controls="list-tab-pane" aria-selected="false"><i class="bi fa-fw bi-list-ul"></i></button>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Tabs and search END -->
+<div class="tab-content mt-3 m-lg-2" id="myTabContent">
+    <!-- Content item START -->
+    <div class="tab-pane fade show active" id="grid-tab-pane">
+        <!-- Rooms START -->
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xxl-5 g-4">
+            {% for menu in menus %}
+            <!-- Room item -->
+            <div class="col">
+                <div class="card shadow h-100">
+                    <!-- Overlay item -->
+                    <div class="position-relative">
+                        <!-- Image -->
+                        <img src="static/media/{{menu.photo}}" class="card-img-top" alt="Card image">
+                        <!-- Overlay -->
+                        <div class="card-img-overlay d-flex flex-column p-3">
+                            <!-- Card overlay top -->
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="badge me-2"><div></div></div>
+                                <!-- Buttons -->
+                                <div class="list-inline-item dropdown">
+                                    <!-- Dropdown button -->
+                                    <a href="#" class="btn btn-sm btn-round btn-light" role="button" id="dropdownAction1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </a>
+                                    <!-- dropdown items -->
+                                    <ul class="dropdown-menu dropdown-menu-end min-w-auto shadow rounded small" aria-labelledby="dropdownAction{{ menu.id }}">
+                                        <li><a class="dropdown-item edit" href="{% url "modifierMenu" menu_id=menu.id %}"><i class="bi bi-pencil-square fa-fw me-2"></i>Modifier</a></li>
+                                        <a class="dropdown-item delete" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ menu.id }}"><i class="bi bi-slash-circle me-2"></i>Supprimer</a>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="deleteModal{{menu.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"  aria-labelledby="deleteModalLabel{{ menu.id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="deleteModalLabel{{ menu.id }}">Suppression : {{menu.nom}}</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p style="font-size : 19px;">cette action sera irréversible et entrainera la supression de tous les données liée a ce menu. Êtes-vous sûr de vouloir supprimer ce menu ?</p>
+                                </div>
+                                <div class="modal-footer">
+                                <button type="button" class="btn btn-success-confirm"><a href="{% url "supprimerMenu" menu_id=menu.id %}">Confirmer</a></button>
+                                <button type="button" class="btn btn-danger-cancel" data-bs-dismiss="modal">Annuler</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card body START -->
+                    <div class="card-body px-3">
+                        <!-- Title -->
+                        <h5 class="card-title mb-1"><a href="admin-booking-detail.html">{{menu.nom}}</a></h5>
+                        <ul class="list-group list-group-borderless small mt-2 mb-0">
+                            <li class="list-group-item pb-0">
+                                <i class="fas fa-utensils me-2"></i>{{menu.type_de_plat}}
+                            </li>
+                            <li class="list-group-item pb-0">
+                                <i class="bi bi-building fa-fw me-2"></i>{{menu.restaurant.nom}}
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Card body END -->
+
+                    <!-- Card footer START-->
+                    <div class="card-footer pt-0">
+                        <!-- Price -->
+                        <div class="hstack gap-2 mb-2">
+                            <h6 class="fw-normal mb-0">{{menu.prix}} F CFA</h6>
+                        </div>
+                        <a href="{% url "detailMenu" menu.id%}" class="btn btn-sm btn-primary-soft mb-0 w-100">Voir detail</a>
+                    </div>
+                </div>
+            </div>
+{% endfor %}
+</div>
+</div>
+</div>
+</div>
+{% endblock %}

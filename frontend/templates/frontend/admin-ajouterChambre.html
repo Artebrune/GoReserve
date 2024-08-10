@@ -1,0 +1,129 @@
+{% extends 'frontend/base.html' %}
+
+{% block title %}GoReserve - Ajouter chambre{% endblock %}
+
+{% block head %}
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+{% endblock %}
+
+{% block content %}
+{%load static%}
+<div class="page-content-wrapper p-xxl-4">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/css_formulaireAjouterChambre.css' %}">
+<div class="wrapper">
+    <div>
+        <h3>Ajouter Chambre</h3>
+    </div>
+    <div class="header">
+        <ul>
+            <li class="active form_1_progessbar">
+                <div>
+                    <p>1</p>
+                </div>
+            </li>
+            <li class="form_2_progessbar">
+                <div>
+                    <p>2</p>
+                </div>
+            </li>
+            <li class="form_3_progessbar">
+                <div>
+                    <p>3</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="form_wrap">
+        <form method="post" enctype="multipart/form-data" action="ajouterChambre">
+			{% csrf_token %}
+            <div class="form_1 data_info">
+                <h4>Etape 1</h4>
+                <div class="form_container">
+                    <div class="input_wrap">
+                        <label for="nom">Nom :</label>
+                        <input type="text" id="nom" name="nom" class="input" required><br><br>
+                    </div>
+                    <div class="input_wrap">
+                        <label for="description">Description</label>
+                        <textarea name="description" id="description" class="input" cols="63" rows="4" placeholder="" required></textarea>
+                    </div>
+                    <div class="input_wrap">
+                        <label for="hotel">Hôtel :</label>
+                        <select id="hotel" name="hotel" required class="input" required>
+                            <option value="" selected>Sélectionner un hôtel</option>
+                            {% for hotel in hotels %}
+                                <option value="{{ hotel.id }}">{{ hotel.nom }}</option>
+                            {% endfor %}
+                        </select><br><br>
+                    </div>
+                </div>
+            </div>
+            <div class="form_2 data_info" style="display: none;">
+                <h4>Etape 2</h4>
+                <div class="form_container">
+                    <div class="input_wrap">
+                        <label for="type_de_chambre">Type de Chambre :</label>
+                        <select id="type_de_chambre" name="type_de_chambre" class="input" required>
+                            <option value="simple">Simple</option>
+                            <option value="double">Double</option>
+                            <option value="suite">Suite</option>
+                        </select><br><br>
+                    </div>
+                    <div class="input_wrap">
+                        <label for="surface">Surface (m²) :</label>
+                        <input type="number" step="0.01" id="surface" name="surface" class="input" required><br><br>
+                    </div>
+                    <div class="input_wrap">
+                        <label for="tarif_par_nuit">Tarif par Nuit :</label>
+                        <input type="number" step="0.01" id="tarif_par_nuit" name="tarif_par_nuit" class="input" required><br><br>
+                    </div>
+                    <div class="input_wrap">
+                        <label for="emplacement">Emplacement :</label>
+                        <select id="emplacement" name="emplacement" class="input" required>
+                            <option value="1">1er étage</option>
+                            <option value="2">2ème étage</option>
+                            <option value="3">3ème étage</option>
+                            <option value="4">4ème étage</option>
+                            <option value="5">5ème étage</option>
+                        </select><br><br>
+                    </div>
+                </div>
+            </div>
+            <div class="form_3 data_info" style="display: none;">
+                <h4>Etape 3</h4>
+                <div class="form_container">
+                    <div class="input_wrap">
+                        <label for="images">Image(s)</label>
+                        <input type="file" accept="image/*" name="images" class="input" id="images" multiple>
+                    </div>
+                    <div class="input_wrap" id="divRadio">
+                        <label for="vue_sur_mer">Vue sur Mer :</label>
+                        <div id="radio">
+                            <input type="radio" id="vue_sur_mer_oui" name="vue_sur_mer" value="oui" class="input">
+                            <label for="vue_sur_mer_oui">Oui</label><br>
+                            <input type="radio" id="vue_sur_mer_non" name="vue_sur_mer" value="non" class="input">
+                            <label for="vue_sur_mer_non">Non</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="btns_wrap">
+                <div class="common_btns form_1_btns">
+                    <button type="button" class="btn_next">Suivant <span class="icon"><ion-icon name="arrow-forward-sharp"></ion-icon></span></button>
+                </div>
+                <div class="common_btns form_2_btns" style="display: none;">
+                    <button type="button" class="btn_back"><span class="icon"><ion-icon name="arrow-back-sharp"></ion-icon></span>Précédent</button>
+                    <button type="button" class="btn_next">Suivant <span class="icon"><ion-icon name="arrow-forward-sharp"></ion-icon></span></button>
+                </div>
+                <div class="common_btns form_3_btns" style="display: none;">
+                    <button type="button" class="btn_back"><span class="icon"><ion-icon name="arrow-back-sharp"></ion-icon></span>Précédent</button>
+                    <button type="submit" class="btn_done">Enregistrer</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript" src="{% static 'js/js_formulaireAjouterChambre.js' %}"></script>
+</div>
+{% endblock %}
