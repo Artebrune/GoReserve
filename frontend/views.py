@@ -396,7 +396,6 @@ def user_reserverChambre(request, chambre_id):
         date_du_jour_str = request.POST.get('date_du_jour')
         date_arrivee = request.POST.get('date_arrivee')
         nombre_personnes = request.POST.get('nombre_personnes')
-        moyen_paiement = request.POST.get('moyen_paiement')
         
         # Convertir les dates en objets datetime
         date_du_jour = datetime.strptime(date_du_jour_str, '%d/%b/%Y')
@@ -418,7 +417,6 @@ def user_reserverChambre(request, chambre_id):
             chambre=chambre,
             date_arrivee=date_arrivee,
             nombre_personnes=nombre_personnes,
-            moyen_paiement=moyen_paiement,
             prix_total=prix_total,
             numero_confirmation=numero_confirmation
         )
@@ -474,7 +472,6 @@ def user_reserverRestaurant(request, restaurant_id):
         date_arrivee_str = request.POST.get('date_arrivee')
         heure_arrivee_str = request.POST.get('heure_arrivee')
         nombre_personnes = request.POST.get('nombre_personnes')
-        moyen_paiement = request.POST.get('moyen_paiement')
         
         
         date_arrivee = datetime.strptime(date_arrivee_str, '%d/%b/%Y').date()
@@ -488,7 +485,6 @@ def user_reserverRestaurant(request, restaurant_id):
             date_arrivee=date_arrivee,
             heure_arrivee=heure_arrivee,
             nombre_personnes=nombre_personnes,
-            moyen_paiement=moyen_paiement,
             numero_confirmation=numero_confirmation
         )
         reservation.save()
